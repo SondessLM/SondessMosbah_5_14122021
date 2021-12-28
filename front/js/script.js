@@ -1,43 +1,44 @@
-getProducts();
-
 /**
  * Get products.
  * 
+ * @returns array | Bool The products.
  */
-async function getProducts() {
+ async function getProducts() {
+    let products = {};
     await fetch('http://localhost:3000/api/products')
         .then((response) => response.json())
         .then((data) => {
-            displayProducts(data);
+            products = data;
         })
         .catch((erreur) => {
             console.log('erreur :' + erreur);
+            products = false;
         });
+    return products;
 }
 
 /**
  * Display products on the index.html page.
  */
-async function displayProducts(products) {
+async function displayProducts() {
+    let products = await getProducts();
     let items_selector = document.querySelector('.items');
-    if (!isEmpty(products)) {
+    if (products) {
         products.forEach(function (product) {
             items_selector.innerHTML += `<a href="./product.html?id=${product._id}">
-        <article>
-        <img src="${product.imageUrl}" alt="${product.altTxt}">
-        <h3 class="productName">${product.name}</h3>
-        <p class="productDescription">${product.description}</p>
-        </article>
-        </a>`;
+            <article>
+            <img src="${product.imageUrl}" alt="${product.altTxt}">
+            <h3 class="productName">${product.name}</h3>
+            <p class="productDescription">${product.description}</p>
+            </article>
+            </a>`;
 
         });
-    } else {
-        items_selector.innerHTML += `<p>Aucun produit n'est disponble pour le moment.</p>`;
+    } else if (false == products) {
+        alert("Aucun produit n'est disponble pour le moment.");
+        items_selector.innerHTML += `<h4>Aucun produit n'est disponble pour le moment.</h4>`;
     }
 
 }
 
-
-function isEmpty(value) {
-    return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
-}
+displayProducts();
