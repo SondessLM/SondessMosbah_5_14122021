@@ -23,7 +23,7 @@ console.log(productId);
   }
   else {
       product=console.error();
-      alert('le produit aue vous chercher est indisponble pour le moment');
+      alert('le produit que vous chercher est indisponble pour le moment');
       
   }
   return product;
