@@ -1,6 +1,7 @@
-var url = new URL (window.location.href);
-var productId = url.searchParams.get("id");
+
+var productId = new URL (window.location.href).searchParams.get("id");
 console.log(productId);
+
 
 
 
@@ -21,7 +22,9 @@ console.log(productId);
       
   }
   else {
-      alert('il nya pas de produit disponible');
+      product=console.error();
+      alert('le produit aue vous chercher est indisponble pour le moment');
+      
   }
   return product;
 }
@@ -33,7 +36,7 @@ displayOneProduct();
  async function displayOneProduct(){
   let product= await getOneProduct();
   let item_selector = document.querySelector('.item');
-  let productColor = document.querySelector('#colors');
+  const productColor = document.querySelector('#colors');
   const productQuantity = document.querySelector ('#quantity');
   async function productColors(){
       let colors = product.colors;
@@ -50,9 +53,8 @@ displayOneProduct();
   <div class="item__content">
   <div class="item__content__titlePrice">
   <h1 class="productName">${product.name}</h1>
-  <p>${product.price} : <span id="price"></span>€</p>
+  <p>${product.price} <span id="price"></span>€</p>
   </div>
-
   <div class="item__content__description">
     <p class="item__content__description__title">Description :</p>
     <p id="description">${product.description}</p>
@@ -62,9 +64,9 @@ displayOneProduct();
       <label for="color-select">Choisir une couleur :</label>
       <select name="color-select" id="colors">
           <option value="">--SVP, choisissez une couleur --</option>
-          <option value= "">${colors}</option>
-          <option value="">${colors}</option>
-          <option value="">${colors}</option>
+          <option value= "">${product.colors}</option>
+          <option value="">${product.colors}</option>
+          <option value="">${product.colors}</option>
       </select>
     </div>
     <div class="item__content__settings__quantity">
@@ -78,7 +80,7 @@ displayOneProduct();
  </div>   
 </article>`; 
 
-  };
+};
  
    
   

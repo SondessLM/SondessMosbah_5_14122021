@@ -12,9 +12,12 @@ async function getProducts() {
         
     }
     else {
-        alert('Pas de produit disponible pour le moment');
+       
+       alert('Les produits ne sont pas disponibles pour le moment');
+      
     }
     return products;
+    
 }
 
 /**
