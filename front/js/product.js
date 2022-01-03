@@ -67,6 +67,75 @@ async function displayOneProduct()
 } else if (false == product) {
       alert("Le produit que vous chercher est indisponble pour le moment.");
       item_selector.innerHTML += `<h2>Le produit que vous chercher est indisponble pour le moment.</h2>`;}
-}      
+} 
       
 displayOneProduct();
+
+async function addToCard() {
+   let product = await addToCard;
+   let btn = document.querySelector("#addToCart").addEventListener("click",  (event) => {
+   let productQuantity = document.querySelector('#quantity');
+   window.location.href ="cart.html"
+   quantity = Number;
+   productQuantity = quantity;
+   productQuantity.innerHTML += `< input="${Number}">${Number}>`; 
+   let productColor = document.querySelector('#colors');
+   
+   })
+//productChoose//
+        
+let productChoose = {
+  productId: product._id,
+  productColor: product.colors,
+  productQuantity: Number(quantity),
+  produitName: product.name,
+};
+
+//localStorage//
+
+{
+  let productCart = JSON.parse(localStorage.getItem("product"));
+  console.table (productCart);
+}
+
+    
+//quantity selected form 0 to 100
+if (
+productChoose.productQuantity> 0 && productChoose.productQuantity <= 100
+) {
+// product in the cart
+if (productCart != null) {
+  let productAdd = {};
+  const searchs = productCart.find(() => { productAdd
+    return (
+      productAdd.productId === productChoose.productId &&
+      productAdd.productColor === productChoose.productColor
+    );
+  });
+
+  //add this product again
+  if (searchs) {
+    let TotalQuantity =
+    productChoose.productQuantity + searchs.productQuantity;
+    searchs.productQuantity = TotalQuantity;
+    console.table(productCart);
+    localStorage.setItem("product", JSON.stringify(productCart));
+    alert("Votre produit a été ajouté au panier");
+  }
+
+  //add new product
+  else {
+    productCart.push(productChoose);
+    localStorage.setItem("product", JSON.stringify(productCart));
+    console.table(productCart);
+    alert("Votre produit a été ajouté au panier");
+    
+  }
+}
+} else {
+   alert("Veuillez préciser la quantité du produit entre 1 et 100");
+} 
+};
+
+displayOneProduct();
+addToCard();
