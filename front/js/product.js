@@ -68,10 +68,12 @@ async function displayProduct(productId) {
   }
 }
 
-
+// activat Btn to push product//
 async function addToCard() {
-  const addToCardBtn = document.querySelector("#addToCart");
-  addToCardBtn.addEventListener("click", function () {
+  const addToCartBtn = document.querySelector("#addToCart");
+  /*const addToCartBtn = document.getElementById("addToCart");*/
+  /*addToCartBtn.addEventListener("click",  function () {*/
+  addToCartBtn.addEventListener("click",  (event) => {
     let productQuantity = document.querySelector('#quantity');
     /*window.location.href ="cart.html"*/
   }
