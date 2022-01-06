@@ -3,12 +3,15 @@
  * 
  * @returns array | Bool The products.
  */
- async function getProducts() {
+async function getProducts() {
     let products = {};
     await fetch('http://localhost:3000/api/products')
-        .then((response) => response.json())
-        .then((data) => {
-            products = data;
+        .then(function (response) {
+            if (response.ok) {
+                products = response.json();
+            } else {
+                products = false;
+            }
         })
         .catch((erreur) => {
             console.log('erreur :' + erreur);
@@ -32,7 +35,6 @@ async function displayProducts() {
             <p class="productDescription">${product.description}</p>
             </article>
             </a>`;
-
         });
     } else if (false == products) {
         alert("Aucun produit n'est disponble pour le moment.");

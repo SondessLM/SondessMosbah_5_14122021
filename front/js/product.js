@@ -1,17 +1,18 @@
-
-var productId = new URL(window.location.href).searchParams.get("id");
-
 /**
- * Get Oneproduct.
+ * Get the product.
  * 
- * array one products from The product list.
+ * @param int productId The prouct id.
+ * @returns array | Bool product The product.
  */
-async function getOneProduct() {
+async function getProduct(productId) {
   let product = {};
   await fetch('http://localhost:3000/api/products/' + productId)
-    .then((response) => response.json())
-    .then((data) => {
-      product = data;
+    .then(function (response) {
+      if (response.ok) {
+        product = response.json();
+      } else {
+        product = false;
+      }
     })
     .catch((erreur) => {
       console.log('erreur :' + erreur);
@@ -23,14 +24,11 @@ async function getOneProduct() {
 /**
  * Display  product on the product.html page.
  */
-async function displayOneProduct() 
-{
-  let product = await getOneProduct();
+async function displayProduct(productId) {
+  let product = await getProduct(productId);
   let item_selector = document.querySelector('.item');
-  if (product) 
-  {
-    
-       item_selector.innerHTML = `<article> 
+  if (product) {
+    item_selector.innerHTML = `<article> 
        <div class= "item__img" ${product._id}">
        <img src="${product.imageUrl}" alt="${product.altTxt}</div>
        <div class="item__content">
@@ -58,32 +56,49 @@ async function displayOneProduct()
         </div>   
        </article>`;
 
-       let productColor = document.querySelector('#colors');
-       let colors = product.colors;
-       colors.forEach(function (color) {
-       productColor.innerHTML += `<option value="${color}">${color}</option>`;
-       
-       });
-} else if (false == product) {
-      alert("Le produit que vous chercher est indisponble pour le moment.");
-      item_selector.innerHTML += `<h2>Le produit que vous chercher est indisponble pour le moment.</h2>`;}
-} 
-      
-displayOneProduct();
+    let productColor = document.querySelector('#colors');
+    let colors = product.colors;
+    colors.forEach(function (color) {
+      productColor.innerHTML += `<option value="${color}">${color}</option>`;
+
+    });
+  } else if (false == product) {
+    alert("Le produit que vous chercher est indisponble pour le moment.");
+    item_selector.innerHTML = `<h2>Le produit que vous chercher est indisponble pour le moment.</h2>`;
+  }
+}
+
 
 async function addToCard() {
-   let product = await addToCard;
-   let btn = document.querySelector("#addToCart").addEventListener("click",  (event) => {
-   let productQuantity = document.querySelector('#quantity');
-   window.location.href ="cart.html"
-   quantity = Number;
-   productQuantity = quantity;
-   productQuantity.innerHTML += `< input="${Number}">${Number}>`; 
-   let productColor = document.querySelector('#colors');
-   
-   })
-//productChoose//
-        
+  const addToCardBtn = document.querySelector("#addToCart");
+  addToCardBtn.addEventListener("click", function () {
+    let productQuantity = document.querySelector('#quantity');
+    /*window.location.href ="cart.html"*/
+  }
+  )
+};
+
+async function main() {
+  var productId = new URL(window.location.href).searchParams.get("id");
+  displayProduct(productId);
+  addToCard(productId);
+}
+
+main();
+
+/*async function addToCard() {
+  let product = await addToCard;
+  let btn = document.querySelector("#addToCart").addEventListener("click",  function () {
+  let productQuantity = document.querySelector('#quantity');
+  window.location.href ="cart.html"
+  quantity = Number;
+  productQuantity = quantity;
+  productQuantity.innerHTML += `< input="${Number}">${Number}>`; 
+  let productColor = document.querySelector('#colors');
+  }
+  )};*/
+
+let product = ""
 let productChoose = {
   productId: product._id,
   productColor: product.colors,
@@ -95,47 +110,46 @@ let productChoose = {
 
 {
   let productCart = JSON.parse(localStorage.getItem("product"));
-  console.table (productCart);
+  /*console.table (productCart);*/
 }
 
-    
+
 //quantity selected form 0 to 100
 if (
-productChoose.productQuantity> 0 && productChoose.productQuantity <= 100
-) {
-// product in the cart
-if (productCart != null) {
-  let productAdd = {};
-  const searchs = productCart.find(() => { productAdd
-    return (
-      productAdd.productId === productChoose.productId &&
-      productAdd.productColor === productChoose.productColor
-    );
-  });
+  productChoose.productQuantity > 0 && productChoose.productQuantity <= 100
+)
+  // product in the cart
+  if (productCart != null) {
+    let productAdd = {};
+    const searchs = productCart.find(() => {
+      productAdd
+      return (
+        productAdd.productId === productChoose.productId &&
+        productAdd.productColor === productChoose.productColor
+      );
+    });
 
-  //add this product again
-  if (searchs) {
-    let TotalQuantity =
-    productChoose.productQuantity + searchs.productQuantity;
-    searchs.productQuantity = TotalQuantity;
-    console.table(productCart);
-    localStorage.setItem("product", JSON.stringify(productCart));
-    alert("Votre produit a été ajouté au panier");
+    //add this product again
+    if (searchs) {
+      let TotalQuantity =
+        productChoose.productQuantity + searchs.productQuantity;
+      searchs.productQuantity = TotalQuantity;
+      console.table(productCart);
+      localStorage.setItem("product", JSON.stringify(productCart));
+      alert("Votre produit a été ajouté au panier");
+    }
+
+    //add new product
+    else {
+      productCart.push(productChoose);
+      localStorage.setItem("product", JSON.stringify(productCart));
+      console.table(productCart);
+      alert("Votre produit a été ajouté au panier");
+
+    }
   }
-
-  //add new product
   else {
-    productCart.push(productChoose);
-    localStorage.setItem("product", JSON.stringify(productCart));
-    console.table(productCart);
-    alert("Votre produit a été ajouté au panier");
-    
-  }
-}
-} else {
-   alert("Veuillez préciser la quantité du produit entre 1 et 100");
-} 
-};
+    alert("Veuillez préciser la quantité du produit entre 1 et 100");
 
-displayOneProduct();
-addToCard();
+  };
+
