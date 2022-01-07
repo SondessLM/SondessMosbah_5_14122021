@@ -47,7 +47,7 @@ async function displayProduct(productId) {
        </div>
        <div class="item__content__settings__quantity">
        <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
-       <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
+       <input type="number" name="itemQuantity" min="1" max="100" value="1" id="quantity">
        </div>
        </div>
        <div class="item__content__addButton">
@@ -62,13 +62,15 @@ async function displayProduct(productId) {
       productColor.innerHTML += `<option value="${color}">${color}</option>`;
 
     });
+    
+
     // activat Btn to push product//
     var button = document.getElementById("addToCart");                             
     button.innerHTML = "ajouter au panier";                
     button.addEventListener("click", function() {
-        alert("votre produit est ajouter!");
-                                
+        alert("votre produit a été ajouté au panier");                                
 });
+
 /*window.location.href ="cart.html"*/
 
   } else if (false == product) {
@@ -76,11 +78,6 @@ async function displayProduct(productId) {
     item_selector.innerHTML = `<h2>Le produit que vous chercher est indisponble pour le moment.</h2>`;
   }
 }
-
-
-
-
-
 async function main() {
   var productId = new URL(window.location.href).searchParams.get("id");
   displayProduct(productId);
@@ -89,17 +86,11 @@ async function main() {
 
 main();
 
-/*async function addToCard() {
-  let product = await addToCard;
-  let btn = document.querySelector("#addToCart").addEventListener("click",  function () {
-  let productQuantity = document.querySelector('#quantity');
-  window.location.href ="cart.html"
-  quantity = Number;
-  productQuantity = quantity;
-  productQuantity.innerHTML += `< input="${Number}">${Number}>`; 
-  let productColor = document.querySelector('#colors');
-  }
-  )};*/
+let color = getElementById("colors");
+let colorProduct = color.value;
+const quantity = getElementById("quantity");
+let quantityProduct = quantity.value;
+
 
 let product = ""
 let productChoose = {
