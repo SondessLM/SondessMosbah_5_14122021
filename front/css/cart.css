@@ -11,6 +11,11 @@ h1 {
 h2 {
 	text-align: start;
 }
+h3{
+    margin-left: 31%;
+	font-size: 28px;
+	font-weight: 500;
+}
 
 /************/
 /*Cart Items*/
