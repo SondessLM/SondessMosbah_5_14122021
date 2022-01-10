@@ -7,7 +7,7 @@ var productId = new URL(window.location.href).searchParams.get("id");
  */
 async function getProduct(productId) {
   let product = {};
-  await fetch('http://localhost:3000/api/products/' + productId)
+    await fetch('http://localhost:3000/api/products/' + productId)
     .then(function (response) {
       if (response.ok) {
         product = response.json();
@@ -87,30 +87,28 @@ async function displayProduct(productId) {
   displayProduct(productId);
   
 
-productId = new URL(window.location.href).searchParams.get("id");
-let productChoose = {
+  productId = new URL(window.location.href).searchParams.get("id");
+productChoose = {
   product: productId,
   productQuantity:quantity.value,
-  productName:productId.name,
-  ProductPrice:productId.price,  
-  
-};
-
+  productColors:colors.value,
+  productName:productId,
+  ProductPrice:productId,  
+ };
 
 //local Storage//
-  let productInLocalStorage =  JSON.parse(localStorage.getItem('product'));
-  const addProductLocalStorage = () => {
-  productInLocalStorage.push(productChoose);
-  localStorage.setItem('product', JSON.stringify(productInLocalStorage));
-  }
-
-  let confirm = false;
+  productLocalStorage =  JSON.parse(localStorage.getItem('productId'));
+  const addProductLocalStorage = productLocalStorage.push(productChoose);
+  JSON.stringify(productLocalStorage);
   
-  if (productInLocalStorage) {
-     productInLocalStorage.forEach (function (productId, qty) {
-    if (productId == productId && productId.color == colors.value) {
-      productInLocalStorage[qty].quantity = parseInt(productId.quantity) + parseInt(quantity.value);
-      localStorage.setItem('product', JSON.stringify(productInLocalStorage));
+
+  const confirm = false;
+  
+  if (productLocalStorage) {
+     productLocalStorage.forEach (function (productId, number) {
+    if (productId == productId && productColors == colors.value) {
+      productLocalStorage[number].quantity = parseInt(productId.quantity) + parseInt(quantity.value);
+      JSON.stringify(productLocalStorage);
       confirm = true;
       
     }
@@ -124,7 +122,7 @@ let productChoose = {
   }
 
   else {
-    productInLocalStorage = [];
+    productLocalStorage = [];
     addProductLocalStorage();
     
   }
