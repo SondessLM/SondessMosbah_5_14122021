@@ -1,4 +1,5 @@
 var productId = new URL(window.location.href).searchParams.get("id");
+
 /**
  * Get the product.
  * 
@@ -7,7 +8,7 @@ var productId = new URL(window.location.href).searchParams.get("id");
  */
 async function getProduct(productId) {
   let product = {};
-    await fetch('http://localhost:3000/api/products/' + productId)
+  await fetch('http://localhost:3000/api/products/' + productId)
     .then(function (response) {
       if (response.ok) {
         product = response.json();
@@ -24,6 +25,8 @@ async function getProduct(productId) {
 
 /**
  * Display  product on the product.html page.
+ * 
+ * @param int productId The prouct id.
  */
 async function displayProduct(productId) {
   let product = await getProduct(productId);
@@ -35,7 +38,7 @@ async function displayProduct(productId) {
        <div class="item__content">
        <div class="item__content__titlePrice">
        <h1 class="productName">${product.name}</h1>
-       <p>${product.price} <span id="price"></span>€</p>
+       <p>Prix : <span id="price">${product.price}</span>€</p>
        </div>
        <div class="item__content__description">
        <p class="item__content__description__title">Description :</p>
@@ -63,19 +66,7 @@ async function displayProduct(productId) {
       productColor.innerHTML += `<option value="${color}">${color}</option>`;
     });
 
-    // activat Btn to push product// 
-    var button = document.getElementById("addToCart");
-    button.innerHTML = "ajouter au panier";
-    button.addEventListener("click", function () {
-      const quantity = document.getElementById('quantity');
-      quantityProduct = quantity.value;
-      if (quantity.value > 0 && quantity.value <=100 && quantity.value != 0)
-       { window.confirm(`Votre produit a eté ajouté au panier`);
-       }else 
-      { window.confirm(`Veuillez selectionner la quantité, cliquez sur OK`);}
-       
-      
-    });
+    addToCart(productId);
 
   } else if (false == product) {
     alert("Le produit que vous chercher est indisponble pour le moment.");
@@ -83,46 +74,132 @@ async function displayProduct(productId) {
   }
 }
 
- 
-  displayProduct(productId);
-  
-
-  productId = new URL(window.location.href).searchParams.get("id");
-productChoose = {
-  product: productId,
-  productQuantity:quantity.value,
-  productColors:colors.value,
-  productName:productId,
-  ProductPrice:productId,  
- };
-
-//local Storage//
-  productLocalStorage =  JSON.parse(localStorage.getItem('productId'));
-  const addProductLocalStorage = productLocalStorage.push(productChoose);
-  JSON.stringify(productLocalStorage);
-  
-
-  const confirm = false;
-  
-  if (productLocalStorage) {
-     productLocalStorage.forEach (function (productId, number) {
-    if (productId == productId && productColors == colors.value) {
-      productLocalStorage[number].quantity = parseInt(productId.quantity) + parseInt(quantity.value);
-      JSON.stringify(productLocalStorage);
-      confirm = true;
+/**
+ * Add product to cart.
+ * 
+ * @param int productId The prouct id.
+ */
+function addToCart(productId) {
+  var button = document.getElementById("addToCart");
+  button.innerHTML = "ajouter au panier";
+  button.addEventListener("click", function () {
+    const quantitySelector = document.getElementById('quantity');
+    const colorSelector = document.getElementById('colors');
+    const priceSelector = document.getElementById('price');
+    const quantity = quantitySelector.value;
+    const color = colorSelector.value;
+    const price = priceSelector.innerHTML;
+    if ("" == color || "undefined" == color) {
+      alert("Veuillez sélectionner une couleur valide.");
+    } else if (quantity <= 0 || quantity > 100 || "undefined" == quantity) {
+      alert("Veuillez sélectionner une quantité valide. La quantité doit etre comprise entre 1 et 100.");
+    } else {
+      var localStorageCart = createlocalStorageCart();
+      var productExistInLocalStorageCart = checkProductExistInLocalStorageCart(productId);
+    }
+    let productInLocalStorageCart = JSON.parse(localStorage.getItem('product'));
+    const addToCartConfirmation = () => {
+      //Si le visiteur clique sur 'OK' il sera rediriger au panier
+      if (confirm(`${product.name} a bien été ajouté au panier
+          Souhaitez-vous consulter le panier ?`)) {
+          window.location.href = 'cart.html';
+          //Si il clique sur annuler il sera rediriger vers la page index.html
+      } else {
+          window.location.href = 'index.html';
+      }
+if (productExistInLocalStorageCart) {
+//Ici le produit existe deja dans le local storage, donc il faudras mettre a jour la quantite
+//En faisant la quantite dans le localstorage + la nouvelle quantite.
+        const result = ProductExistInLocalStorageCart.find(
+          (el) => el.productId === el.product._Id && el.productColor=== el.colorSelector);
+        //si le produit est déjà dans le panier
+        if (result) {
+            let newQuantite = parseInt(product.quantity) + parseInt(result.quantity);
+            result.quantity = newQuantite;
+            localStorage.setItem('cart', JSON.stringify(productExistInLocalStorageCart));
+            console.table(productExistInLocalStorageCart);
+            addToCartConfirmation();
+  }
+          } else {
+//Ici le produit n'existe deja dans le local storage, il vas falloir l'ajouter
+            productExistInLocalStorageCart.push(product);
+            localStorage.setItem('cart', JSON.stringify(productExistInLocalStorageCart));
+            addToCartConfirmation();
+            
+         
+  var product = {
+     productId: productId,
+     productColor: color,
+     productQuantity: quantity,
       
     }
-  });
+  }}}
+  )};
+  
 
-  //
-    if (comfirm =true) {
-    addProductLocalStorage();
-    
+displayProduct(productId);
+
+/**
+ * Check if the local storage cart exist.
+ * 
+ * @returns bool localStorageCartExist The local storage cart exist.
+ */
+function checkLocalStorageCartExist() {
+  var localStorageCartExist = false;
+  if ("undefined" !== typeof (Storage)) {
+    var cart = localStorage.getItem('cart');
+    if (null == cart || "undefined" == cart) {
+      localStorageCartExist = false;
+    } else {
+      localStorageCartExist = true;
     }
   }
+  return localStorageCartExist;
+}
 
-  else {
-    productLocalStorage = [];
-    addProductLocalStorage();
-    
+/**
+ * Create create local storage cart if not exist.
+ * 
+ * @returns Object localStorageCart The local storage cart.
+ */
+function createlocalStorageCart() {
+  var islocalStorageCart = checkLocalStorageCartExist();
+  if (!islocalStorageCart) {
+    localStorage.setItem("cart", JSON.stringify({}));
   }
+  return getLocalStorageCart();
+}
+
+/**
+ * Get local storage cart.
+ * 
+ * @returns Object localStorageCart The local storage cart.
+ */
+function getLocalStorageCart() {
+  var localStorageCart = {};
+  var islocalStorageCart = checkLocalStorageCartExist();
+  if (islocalStorageCart) {
+    localStorage.getItem('cart');
+  }
+  return localStorageCart;
+}
+
+/**
+ * Check if produc exist in the local storage cart.
+ * 
+ * @param int productId The product id.
+ * @returns bool productExistInLocalStorageCart The product exist in the local storage cart.
+ */
+function checkProductExistInLocalStorageCart(productId) {
+  var localStorageCart = createlocalStorageCart();
+  var cart = getLocalStorageCart();
+  var productExistInLocalStorageCart = false;
+  if (cart && null != cart && "undefined" == cart) {
+    cart.forEach(function (cartItem) {
+      if (cartItem.productId == productId) {
+        productExistInLocalStorageCart = true;
+      };
+    });
+  }
+  return productExistInLocalStorageCart;
+}
