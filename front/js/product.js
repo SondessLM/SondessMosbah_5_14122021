@@ -98,33 +98,33 @@ function addToCart(productId) {
       var productExistInLocalStorageCart = checkProductExistInLocalStorageCart(productId);
     }
     let productInLocalStorageCart = JSON.parse(localStorage.getItem('product'));
-    const addToCartConfirmation = () => {
+    //const addToCart = () => {
       //Si le visiteur clique sur 'OK' il sera rediriger au panier
-      if (confirm(`${product.name} a bien été ajouté au panier
-          Souhaitez-vous consulter le panier ?`)) {
-          window.location.href = 'cart.html';
+     // if (confirm(`${product.name} a bien été ajouté au panier
+       //   Souhaitez-vous consulter le panier ?`)) {
+         // window.location.href = 'cart.html';
           //Si il clique sur annuler il sera rediriger vers la page index.html
-      } else {
-          window.location.href = 'index.html';
-      }
+      //} else {
+        //  window.location.href = 'index.html';
+     // }
 if (productExistInLocalStorageCart) {
 //Ici le produit existe deja dans le local storage, donc il faudras mettre a jour la quantite
 //En faisant la quantite dans le localstorage + la nouvelle quantite.
         const result = ProductExistInLocalStorageCart.find(
-          (el) => el.productId === el.product._Id && el.productColor=== el.colorSelector);
+          (el) => el.productId === el.productId && el.productColor=== el.colorSelector);
         //si le produit est déjà dans le panier
         if (result) {
             let newQuantite = parseInt(product.quantity) + parseInt(result.quantity);
             result.quantity = newQuantite;
             localStorage.setItem('cart', JSON.stringify(productExistInLocalStorageCart));
             console.table(productExistInLocalStorageCart);
-            addToCartConfirmation();
+            addToCart();
   }
           } else {
 //Ici le produit n'existe deja dans le local storage, il vas falloir l'ajouter
-            productExistInLocalStorageCart.push(product);
+            checkProductExistInLocalStorageCart.push(product);
             localStorage.setItem('cart', JSON.stringify(productExistInLocalStorageCart));
-            addToCartConfirmation();
+            addToCart();
             
          
   var product = {
@@ -133,7 +133,7 @@ if (productExistInLocalStorageCart) {
      productQuantity: quantity,
       
     }
-  }}}
+  }}
   )};
   
 
