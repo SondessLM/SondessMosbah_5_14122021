@@ -1,29 +1,6 @@
 var productId = new URL(window.location.href).searchParams.get("id");
 
 /**
- * Get the product.
- * 
- * @param int productId The prouct id.
- * @returns array | Bool product The product.
- */
-async function getProduct(productId) {
-  let product = {};
-  await fetch('http://localhost:3000/api/products/' + productId)
-    .then(function (response) {
-      if (response.ok) {
-        product = response.json();
-      } else {
-        product = false;
-      }
-    })
-    .catch((erreur) => {
-      console.log('erreur :' + erreur);
-      product = false;
-    });
-  return product;
-}
-
-/**
  * Display  product on the product.html page.
  * 
  * @param int productId The prouct id.
@@ -32,41 +9,90 @@ async function displayProduct(productId) {
   let product = await getProduct(productId);
   let item_selector = document.querySelector('.item');
   if (product) {
-    item_selector.innerHTML = `<article> 
-       <div class= "item__img" ${product._id}">
-       <img src="${product.imageUrl}" alt="${product.altTxt}</div>
-       <div class="item__content">
-       <div class="item__content__titlePrice">
-       <h1 class="productName">${product.name}</h1>
-       <p>Prix : <span id="price">${product.price}</span>€</p>
-       </div>
-       <div class="item__content__description">
-       <p class="item__content__description__title">Description :</p>
-       <p id="description">${product.description}</p>
-       </div>
-       <div class="item__content__settings">
-       <div class="item__content__settings__color">
-       <label for="color-select">Choisir une couleur :</label>
-       <select name="color-select" id="colors"></select>
-       </div>
-       <div class="item__content__settings__quantity">
-       <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
-       <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
-       </div>
-       </div>
-       <div class="item__content__addButton">
-       <button id="addToCart">Ajouter au panier</button>
-       </div>
-        </div>   
-       </article>`;
+     //Creation de l'élément / balise article du produit choisit.
+     var productIdArticleSelector = document.createElement("article");
+     productIdArticleSelector.classList.add("item__content");
 
-    let productColor = document.querySelector('#colors');
-    let colors = product.colors;
-    colors.forEach(function (color) {
-      productColor.innerHTML += `<option value="${color}">${color}</option>`;
-    });
+     //Creation de l'élément / balise div coneteur de l'image du produit choisi.
+     var productIdImageContainerSelector = document.createElement("div");
+     productIdImageContainerSelector.classList.add("item__img");
 
-    addToCart(product);
+     //Creation de l'élément / balise image du produit choisi.
+     var productIdImageSelector = document.createElement("img");
+     productIdImageSelector.setAttribute("src", product.imageUrl);
+     productIdImageSelector.setAttribute("alt", product.altTxt);
+
+     //Creation de l'élément / balise conteneur du produit choisi.
+     var productIdCartItemContentSelector = document.createElement("div");
+     productIdCartItemContentSelector.classList.add("item__content__titlePrice");
+
+     //Creation de l'élément / balise nom du produit .
+     var productIdNameSelector = document.createElement("h1");
+     productIdNameSelector.classList.add("title");
+     productIdNameSelector.textContent = product.name;
+
+     //Creation de l'élément / balise conteneur decriptif du produit.
+     var productIdCartItemContentDescriptionSelectorTitle = document.createElement("p");
+     productIdCartItemContentDescriptionSelectorTitle.classList.add("item__content__description__title")
+     productIdCartItemContentDescriptionSelectorTitle.innerHTML = "Description:";
+     ////Creation de l'élément / balise conteneur decriptif du produit.
+     var productIdCartItemContentDescriptionSelector = document.createElement("div");
+     productIdCartItemContentDescriptionSelector.classList.add("item__content__description")
+     productIdCartItemContentDescriptionSelector.textContent = product.description;
+
+     
+
+     //Creation de l'élément / balise nom du produit choisi.
+     var productIdDescriptionSelectors = document.createElement("p")
+     productIdDescriptionSelectors.classList.add("description");
+     productIdDescriptionSelectors.textContent = product.name;
+
+     //Creation de l'élément / balise prix du produit dans le panier.
+     var productIdPriceSelector = document.createElement("p");
+     productIdPriceSelector.classList.add("prix");
+     productIdPriceSelector.innerHTML = "Prix : " + " " + product.price + "€";       
+     //productIdPriceSelector.textContent = product.price;
+
+     //Creation de l'élément / balise couleur choisie pour le produit dans le panier.
+     var productIdChoseColorSelector = document.createElement("select");
+     productIdChoseColorSelector.classList.add("colors");
+     productIdChoseColorSelector.textContent = product.colors;
+
+     
+
+     productIdImageContainerSelector.appendChild(productIdImageSelector);
+
+     productIdCartItemContentDescriptionSelector.appendChild(productIdNameSelector);
+     productIdCartItemContentDescriptionSelector.appendChild(productIdPriceSelector);
+     productIdCartItemContentDescriptionSelector.appendChild(productIdCartItemContentSelector);
+     
+     productIdCartItemContentDescriptionSelector.appendChild(productIdCartItemContentDescriptionSelectorTitle);
+     productIdCartItemContentDescriptionSelector.appendChild(productIdChoseColorSelector);
+    
+     
+
+     productIdArticleSelector.appendChild(productIdImageContainerSelector);
+     productIdArticleSelector.appendChild(productIdNameSelector);
+     productIdArticleSelector.appendChild(productIdPriceSelector);
+     productIdArticleSelector.appendChild(productIdCartItemContentDescriptionSelectorTitle);
+     productIdArticleSelector.appendChild(productIdCartItemContentDescriptionSelector);
+
+     item_selector.appendChild(productIdArticleSelector);
+
+  
+// Insertion des couleurs du produit.
+        
+    var colors = document.getElementById("colors");
+for (let i=0; i < product.colors.length; i++) {
+  var color = document.createElement("option");
+  color.setAttribute('value', product.colors[i]);
+  color.innerHTML = product.colors;
+  colors.appendChild(color);
+  
+    
+  }
+
+    addToCart(productId);
 
   } else if (false == product) {
     alert("Le produit que vous chercher est indisponble pour le moment.");
@@ -89,6 +115,7 @@ function addToCart(productId) {
     const quantity = quantitySelector.value;
     const color = colorSelector.value;
     const price = priceSelector.innerHTML;
+
     if ("" == color || "undefined" == color) {
       alert("Veuillez sélectionner une couleur valide.");
     } else if (quantity <= 0 || quantity > 100 || "undefined" == quantity) {
@@ -97,7 +124,7 @@ function addToCart(productId) {
       var localStorageCart = createlocalStorageCart();
       localStorageCart = JSON.parse(localStorageCart);
       var productExistInLocalStorageCart = checkProductExistInLocalStorageCart(productId);
-      //let productInLocalStorageCart = JSON.parse(localStorage.getItem('product'));
+      console.log(productExistInLocalStorageCart);
       if (productExistInLocalStorageCart) {
         // //Ici le produit existe deja dans le local storage, donc il faudras mettre a jour la quantite
         // //En faisant la quantite dans le localstorage + la nouvelle quantite.
@@ -117,6 +144,7 @@ function addToCart(productId) {
           productQuantity: parseInt(quantity),
         }
         localStorageCart.push(product);
+        console.log(product);
         localStorage.setItem('cart', JSON.stringify(localStorageCart));
         alert("Votre produit a été ajouté au panier.");
       }
@@ -131,69 +159,3 @@ function addToCart(productId) {
 
 
 displayProduct(productId);
-
-/**
- * Check if the local storage cart exist.
- * 
- * @returns bool localStorageCartExist The local storage cart exist.
- */
-function checkLocalStorageCartExist() {
-  var localStorageCartExist = false;
-  if ("undefined" !== typeof (Storage)) {
-    var cart = localStorage.getItem('cart');
-    if (null == cart || "undefined" == cart) {
-      localStorageCartExist = false;
-    } else {
-      localStorageCartExist = true;
-    }
-  }
-  return localStorageCartExist;
-}
-
-/**
- * Create create local storage cart if not exist.
- * 
- * @returns Object localStorageCart The local storage cart.
- */
-function createlocalStorageCart() {
-  var islocalStorageCart = checkLocalStorageCartExist();
-  if (!islocalStorageCart) {
-    localStorage.setItem("cart", JSON.stringify([]));
-  }
-  return getLocalStorageCart();
-}
-
-/**
- * Get local storage cart.
- * 
- * @returns Object localStorageCart The local storage cart.
- */
-function getLocalStorageCart() {
-  var localStorageCart = [];
-  var islocalStorageCart = checkLocalStorageCartExist();
-  if (islocalStorageCart) {
-    localStorageCart = localStorage.getItem('cart');
-  }
-  return localStorageCart;
-}
-
-/**
- * Check if produc exist in the local storage cart.
- * 
- * @param int productId The product id.
- * @returns bool productExistInLocalStorageCart The product exist in the local storage cart.
- */
-function checkProductExistInLocalStorageCart(productId) {
-  var cart = getLocalStorageCart();
-  var productExistInLocalStorageCart = false;
-  if (cart && null != cart && "undefined" != cart) {
-    cart = JSON.parse(cart);
-    cart.forEach(function (cartItem) {
-      if (cartItem.productId == productId) {
-        productExistInLocalStorageCart = true;
-      };
-    });
-  }
-  return productExistInLocalStorageCart;
-
-}

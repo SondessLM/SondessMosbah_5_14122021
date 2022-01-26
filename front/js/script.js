@@ -1,26 +1,4 @@
 /**
- * Get products.
- * 
- * @returns array | Bool The products.
- */
-async function getProducts() {
-    let products = {};
-    await fetch('http://localhost:3000/api/products')
-        .then(function (response) {
-            if (response.ok) {
-                products = response.json();
-            } else {
-                products = false;
-            }
-        })
-        .catch((erreur) => {
-            console.log('erreur :' + erreur);
-            products = false;
-        });
-    return products;
-}
-
-/**
  * Display products on the index.html page.
  */
 async function displayProducts() {
@@ -28,17 +6,50 @@ async function displayProducts() {
     let items_selector = document.querySelector('.items');
     if (products) {
         products.forEach(function (product) {
-            items_selector.innerHTML += `<a href="./product.html?id=${product._id}">
+
+            //Creation de l'élément / balise lien du produit.
+            var productLink = document.createElement("a");
+            productLink.setAttribute("href", "product.html?id=" + product._id);
+
+            //Creation de l'élément / balise article du produit.
+            var productArticle = document.createElement("article");
+
+            //Creation de l'élément / balise image du produit.
+            var productImage = document.createElement("img");
+            productImage.setAttribute("src", product.imageUrl);
+            productImage.setAttribute("alt", product.altTxt);
+
+            //Creation de l'élément / balise nom du produit.
+            var productName = document.createElement("h3");
+            productName.textContent = product.name;
+
+            //Creation de l'élément / balise description du produit.
+            var productDescription = document.createElement("p");
+            productDescription.textContent = product.description;
+
+            productArticle.appendChild(productImage);
+            productArticle.appendChild(productName);
+            productArticle.appendChild(productDescription);
+
+            productLink.appendChild(productArticle);
+
+            items_selector.appendChild(productLink);
+
+        });
+        items_selector.innerHTML += `<a href="./product.html?id=${product._id}">
             <article>
             <img src="${product.imageUrl}" alt="${product.altTxt}">
             <h3 class="productName">${product.name}</h3>
             <p class="productDescription">${product.description}</p>
             </article>
             </a>`;
-        });
     } else if (false == products) {
+        //Creation de l'élément / balise  erreur.
+        var error_message = document.createElement("h4");
+        error_message.textContent = "Aucun produit n'est disponble pour le moment.";
+        items_selector.appendChild(error_message);
+
         alert("Aucun produit n'est disponble pour le moment.");
-        items_selector.innerHTML += `<h4>Aucun produit n'est disponble pour le moment.</h4>`;
     }
 
 }
