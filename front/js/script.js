@@ -36,13 +36,7 @@ async function displayProducts() {
             items_selector.appendChild(productLink);
 
         });
-        items_selector.innerHTML += `<a href="./product.html?id=${product._id}">
-            <article>
-            <img src="${product.imageUrl}" alt="${product.altTxt}">
-            <h3 class="productName">${product.name}</h3>
-            <p class="productDescription">${product.description}</p>
-            </article>
-            </a>`;
+        
     } else if (false == products) {
         //Creation de l'élément / balise  erreur.
         var error_message = document.createElement("h4");

@@ -74,7 +74,7 @@ displayProductCart();
 
 
 // } else {
-//   //
+
 //   for (i = 0; i < localStorageCart.length; i++) {
 //     products.push(localStorageCart[i].id);
 
@@ -101,17 +101,17 @@ displayProductCart();
 //                 </div>
 //               </article>
 //         `;
-//   } //si i=  ProductExistInLocalStorageCart
-//   if (i === localStorageCart.length) {
-//     itemCart.innerHTML += itemCards;
-//   }
-// }
+   //si i=  ProductExistInLocalStorageCart
+ if (i === localStorageCart.length) {
+   itemCart.innerHTML += itemCards;
+ } 
+
 
 // //totals quantities
-// function getTotals() {
+function getTotals() {
 
 //   //get quantity
-//   let productQuantity = document.getElementsByClassName('itemQuantity');
+let productQuantity = document.getElementsByClassName('itemQuantity');
 //   let productQuantityLength = productQuantity.length,
 //     totalQuantity = 0;
 
@@ -297,3 +297,4 @@ displayProductCart();
 //   })
 // }
 // postForm();
+}

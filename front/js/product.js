@@ -54,13 +54,24 @@ async function displayProduct(productId) {
      //productIdPriceSelector.textContent = product.price;
 
      //Creation de l'élément / balise couleur choisie pour le produit dans le panier.
-     var productIdChoseColorSelector = document.createElement("select");
-     productIdChoseColorSelector.classList.add("colors");
-     productIdChoseColorSelector.textContent = product.colors;
-
      
+     productIdChoseColorSelector.appendChild(selectColor);
+     var productIdChoseColor = document.createElement("option");
+     productIdChoseColor.classList.add("value");
+     //productIdChoseColor.textContent = product.colors;
+     productIdChoseColorSelector = document.createElement("select");  
+     productIdChoseColorSelector.appendChild(productIdChoseColor);
+     // {
+      for (let colors of product.colors){
+      var productColor = document.createElement("color");    
+      productColor.value = colors;
+      productColor.textContent = colors;
+      productIdChoseColor.appendChild(productColor);}
 
-     productIdImageContainerSelector.appendChild(productIdImageSelector);
+      
+    //creation de la balise quantité
+
+    productIdImageContainerSelector.appendChild(productIdImageSelector);
 
      productIdCartItemContentDescriptionSelector.appendChild(productIdNameSelector);
      productIdCartItemContentDescriptionSelector.appendChild(productIdPriceSelector);
@@ -68,9 +79,7 @@ async function displayProduct(productId) {
      
      productIdCartItemContentDescriptionSelector.appendChild(productIdCartItemContentDescriptionSelectorTitle);
      productIdCartItemContentDescriptionSelector.appendChild(productIdChoseColorSelector);
-    
-     
-
+       
      productIdArticleSelector.appendChild(productIdImageContainerSelector);
      productIdArticleSelector.appendChild(productIdNameSelector);
      productIdArticleSelector.appendChild(productIdPriceSelector);
@@ -80,17 +89,6 @@ async function displayProduct(productId) {
      item_selector.appendChild(productIdArticleSelector);
 
   
-// Insertion des couleurs du produit.
-        
-    var colors = document.getElementById("colors");
-for (let i=0; i < product.colors.length; i++) {
-  var color = document.createElement("option");
-  color.setAttribute('value', product.colors[i]);
-  color.innerHTML = product.colors;
-  colors.appendChild(color);
-  
-    
-  }
 
     addToCart(productId);
 
