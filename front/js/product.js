@@ -9,88 +9,39 @@ async function displayProduct(productId) {
   let product = await getProduct(productId);
   let item_selector = document.querySelector('.item');
   if (product) {
-     //Creation de l'élément / balise article du produit choisit.
-     var productIdArticleSelector = document.createElement("article");
-     productIdArticleSelector.classList.add("item__content");
+    item_selector.innerHTML = `<article> 
+       <div class= "item__img" ${product._id}">
+       <img src="${product.imageUrl}" alt="${product.altTxt}</div>
+       <div class="item__content">
+       <div class="item__content__titlePrice">
+       <h1 class="productName">${product.name}</h1>
+       <p>Prix : <span id="price">${product.price}</span>€</p>
+       </div>
+       <div class="item__content__description">
+       <p class="item__content__description__title">Description :</p>
+       <p id="description">${product.description}</p>
+       </div>
+       <div class="item__content__settings">
+       <div class="item__content__settings__color">
+       <label for="color-select">Choisir une couleur :</label>
+       <select name="color-select" id="colors"></select>
+       </div>
+       <div class="item__content__settings__quantity">
+       <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
+       <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
+       </div>
+       </div>
+       <div class="item__content__addButton">
+       <button id="addToCart">Ajouter au panier</button>
+       </div>
+        </div>   
+       </article>`;
 
-     //Creation de l'élément / balise div coneteur de l'image du produit choisi.
-     var productIdImageContainerSelector = document.createElement("div");
-     productIdImageContainerSelector.classList.add("item__img");
-
-     //Creation de l'élément / balise image du produit choisi.
-     var productIdImageSelector = document.createElement("img");
-     productIdImageSelector.setAttribute("src", product.imageUrl);
-     productIdImageSelector.setAttribute("alt", product.altTxt);
-
-     //Creation de l'élément / balise conteneur du produit choisi.
-     var productIdCartItemContentSelector = document.createElement("div");
-     productIdCartItemContentSelector.classList.add("item__content__titlePrice");
-
-     //Creation de l'élément / balise nom du produit .
-     var productIdNameSelector = document.createElement("h1");
-     productIdNameSelector.classList.add("title");
-     productIdNameSelector.textContent = product.name;
-
-     //Creation de l'élément / balise conteneur decriptif du produit.
-     var productIdCartItemContentDescriptionSelectorTitle = document.createElement("p");
-     productIdCartItemContentDescriptionSelectorTitle.classList.add("item__content__description__title")
-     productIdCartItemContentDescriptionSelectorTitle.innerHTML = "Description:";
-     ////Creation de l'élément / balise conteneur decriptif du produit.
-     var productIdCartItemContentDescriptionSelector = document.createElement("div");
-     productIdCartItemContentDescriptionSelector.classList.add("item__content__description")
-     productIdCartItemContentDescriptionSelector.textContent = product.description;
-
-     
-
-     //Creation de l'élément / balise nom du produit choisi.
-     var productIdDescriptionSelectors = document.createElement("p")
-     productIdDescriptionSelectors.classList.add("description");
-     productIdDescriptionSelectors.textContent = product.name;
-
-     //Creation de l'élément / balise prix du produit dans le panier.
-     var productIdPriceSelector = document.createElement("p");
-     productIdPriceSelector.classList.add("prix");
-     productIdPriceSelector.innerHTML = "Prix : " + " " + product.price + "€";       
-     //productIdPriceSelector.textContent = product.price;
-
-     //Creation de l'élément / balise couleur choisie pour le produit dans le panier.
-     var productIdChoseColorSelector = document.createElement("select");
-     var selectColor = document.createElement("select");
-     selectColor.classList.add("value");
-      productIdChoseColorSelector.appendChild(selectColor);
-     var productIdChoseColor = document.createElement("option");
-     productIdChoseColor.classList.add("value");
-     //productIdChoseColor.textContent = product.colors;
-     
-     productIdChoseColorSelector.appendChild(productIdChoseColor);
-     // {
-      for (let colors of product.colors){
-      var productColor = document.createElement("color");    
-      productColor.value = colors;
-      productColor.textContent = colors;
-      productIdChoseColor.appendChild(productColor);}
-
-      
-    //creation de la balise quantité
-
-    productIdImageContainerSelector.appendChild(productIdImageSelector);
-
-     productIdCartItemContentDescriptionSelector.appendChild(productIdNameSelector);
-     productIdCartItemContentDescriptionSelector.appendChild(productIdPriceSelector);
-     productIdCartItemContentDescriptionSelector.appendChild(productIdCartItemContentSelector);
-     
-     productIdCartItemContentDescriptionSelector.appendChild(productIdCartItemContentDescriptionSelectorTitle);
-     productIdCartItemContentDescriptionSelector.appendChild(productIdChoseColorSelector);
-       
-     productIdArticleSelector.appendChild(productIdImageContainerSelector);
-     productIdArticleSelector.appendChild(productIdNameSelector);
-     productIdArticleSelector.appendChild(productIdPriceSelector);
-     productIdArticleSelector.appendChild(productIdCartItemContentDescriptionSelectorTitle);
-     productIdArticleSelector.appendChild(productIdCartItemContentDescriptionSelector);
-
-     item_selector.appendChild(productIdArticleSelector);
-
-  
+    let productColor = document.querySelector('#colors');
+    let colors = product.colors;
+    colors.forEach(function (color) {
+      productColor.innerHTML += `<option value="${color}">${color}</option>`;
+    });
 
     addToCart(productId);
 
@@ -114,17 +65,17 @@ function addToCart(productId) {
     const priceSelector = document.getElementById('price');
     const quantity = quantitySelector.value;
     const color = colorSelector.value;
-    const price = priceSelector.innerHTML;
+    //const price = priceSelector.innerHTML;
 
     if ("" == color || "undefined" == color) {
       alert("Veuillez sélectionner une couleur valide.");
     } else if (quantity <= 0 || quantity > 100 || "undefined" == quantity) {
       alert("Veuillez sélectionner une quantité valide. La quantité doit etre comprise entre 1 et 100.");
     } else {
-      var localStorageCart = createlocalStorageCart();
-      localStorageCart = JSON.parse(localStorageCart);
+       var localStorageCart = createLocalStorageCart();
       var productExistInLocalStorageCart = checkProductExistInLocalStorageCart(productId);
       console.log(productExistInLocalStorageCart);
+      localStorageCart = JSON.parse(localStorageCart);
       if (productExistInLocalStorageCart) {
         // //Ici le produit existe deja dans le local storage, donc il faudras mettre a jour la quantite
         // //En faisant la quantite dans le localstorage + la nouvelle quantite.
@@ -143,6 +94,8 @@ function addToCart(productId) {
           productColor: color,
           productQuantity: parseInt(quantity),
         }
+        let localStorageCart = addToCart();
+        localStorageCart=[];
         localStorageCart.push(product);
         console.log(product);
         localStorage.setItem('cart', JSON.stringify(localStorageCart));

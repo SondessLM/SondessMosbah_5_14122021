@@ -26,6 +26,7 @@ async function getProducts() {
  * @param int productId The prouct id.
  * @returns array | Bool product The product.
  */
+ var productId = new URL(window.location.href).searchParams.get("id");
 async function getProduct(productId) {
     let product = {};
     await fetch('http://localhost:3000/api/products/' + productId)
@@ -66,7 +67,7 @@ function checkLocalStorageCartExist() {
  * 
  * @returns Object localStorageCart The local storage cart.
  */
-function createlocalStorageCart() {
+function createLocalStorageCart() {
     var islocalStorageCart = checkLocalStorageCartExist();
     if (!islocalStorageCart) {
         localStorage.setItem("cart", JSON.stringify([]));

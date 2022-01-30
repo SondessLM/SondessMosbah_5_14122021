@@ -8,35 +8,34 @@ async function displayProducts() {
         products.forEach(function (product) {
 
             //Creation de l'élément / balise lien du produit.
-            var productLink = document.createElement("a");
-            productLink.setAttribute("href", "product.html?id=" + product._id);
+            var product_link = document.createElement("a");
+            product_link.setAttribute("href", "product.html?id=" + product._id);
 
             //Creation de l'élément / balise article du produit.
-            var productArticle = document.createElement("article");
+            var product_article = document.createElement("article");
 
             //Creation de l'élément / balise image du produit.
-            var productImage = document.createElement("img");
-            productImage.setAttribute("src", product.imageUrl);
-            productImage.setAttribute("alt", product.altTxt);
+            var product_image = document.createElement("img");
+            product_image.setAttribute("src", product.imageUrl);
+            product_image.setAttribute("alt", product.altTxt);
 
             //Creation de l'élément / balise nom du produit.
-            var productName = document.createElement("h3");
-            productName.textContent = product.name;
+            var product_name = document.createElement("h3");
+            product_name.textContent = product.name;
 
             //Creation de l'élément / balise description du produit.
-            var productDescription = document.createElement("p");
-            productDescription.textContent = product.description;
+            var product_description = document.createElement("p");
+            product_description.textContent = product.description;
 
-            productArticle.appendChild(productImage);
-            productArticle.appendChild(productName);
-            productArticle.appendChild(productDescription);
+            product_article.appendChild(product_image);
+            product_article.appendChild(product_name);
+            product_article.appendChild(product_description);
 
-            productLink.appendChild(productArticle);
+            product_link.appendChild(product_article);
 
-            items_selector.appendChild(productLink);
+            items_selector.appendChild(product_link);
 
         });
-        
     } else if (false == products) {
         //Creation de l'élément / balise  erreur.
         var error_message = document.createElement("h4");
