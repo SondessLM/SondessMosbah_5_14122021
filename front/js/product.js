@@ -54,12 +54,14 @@ async function displayProduct(productId) {
      //productIdPriceSelector.textContent = product.price;
 
      //Creation de l'élément / balise couleur choisie pour le produit dans le panier.
-     
-     productIdChoseColorSelector.appendChild(selectColor);
+     var productIdChoseColorSelector = document.createElement("select");
+     var selectColor = document.createElement("select");
+     selectColor.classList.add("value");
+      productIdChoseColorSelector.appendChild(selectColor);
      var productIdChoseColor = document.createElement("option");
      productIdChoseColor.classList.add("value");
      //productIdChoseColor.textContent = product.colors;
-     productIdChoseColorSelector = document.createElement("select");  
+     
      productIdChoseColorSelector.appendChild(productIdChoseColor);
      // {
       for (let colors of product.colors){
