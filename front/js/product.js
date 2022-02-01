@@ -117,7 +117,7 @@ function addToCart(product) {
      * @returns Object localStorageProduct The local storage cart.
      */
     let localStorageProduct = JSON.parse(localStorage.getItem("product"));
-    localStorageProduct.push(productChoice);
+    //localStorageProduct.push(productChoice);
 
     //fenêtre pop-up
     const addToCard =() =>{
