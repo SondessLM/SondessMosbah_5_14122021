@@ -144,6 +144,7 @@ function addToCart(product) {
             parseInt(productChoice.quantityProduct) + parseInt(localStorageCart.quantityProduct);
             localStorageCart.quantityProduct = newQuantity;
             localStorage.setItem("product", JSON.stringify(localStorageProduct));
+            localStorageProduct.push(productChoice);
             console.table(localStorageProduct);
             alert("La quantité de votre produit dans le panier a bien été mise a jour.");
             addToCard();

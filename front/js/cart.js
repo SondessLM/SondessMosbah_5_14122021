@@ -271,9 +271,7 @@ function postForm() {
     let options = {
       method: 'POST',
       body: JSON.stringify(sendForm),
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      
     }
 
     fetch("http://localhost:3000/api/products/order", options) 
