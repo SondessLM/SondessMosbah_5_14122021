@@ -8,9 +8,9 @@ async function getCart(){
 if (localStorageProduct === null || localStorageProduct == 0) {
     //const emptyCart = `<p>Votre panier est vide</p>`;
     let emptyCart = document.querySelector("h1");
-    var error_message = document.createElement("header");
-        error_message.textContent = "Votre panier est vide";
-        emptyCart.appendChild(error_message);
+    var errorMessage = document.createElement("header");
+        errorMessage.textContent = "Votre panier est vide";
+        emptyCart.appendChild(errorMessage);
 
         //alert("Aucun produit n'est disponble pour le moment.");
     alert("votre panier est vide");

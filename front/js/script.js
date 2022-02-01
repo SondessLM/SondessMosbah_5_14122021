@@ -30,39 +30,39 @@
         products.forEach(function (product) {
 
             //Creation de l'élément / balise lien du produit.
-            var product_link = document.createElement("a");
-            product_link.setAttribute("href", "product.html?id=" + product._id);
+            var productLink = document.createElement("a");
+            productLink.setAttribute("href", "product.html?id=" + product._id);
 
             //Creation de l'élément / balise article du produit.
-            var product_article = document.createElement("article");
+            var productArticle = document.createElement("article");
 
             //Creation de l'élément / balise image du produit.
-            var product_image = document.createElement("img");
-            product_image.setAttribute("src", product.imageUrl);
-            product_image.setAttribute("alt", product.altTxt);
+            var productImage = document.createElement("img");
+            productImage.setAttribute("src", product.imageUrl);
+            productImage.setAttribute("alt", product.altTxt);
 
             //Creation de l'élément / balise nom du produit.
-            var product_name = document.createElement("h3");
-            product_name.textContent = product.name;
+            var productName = document.createElement("h3");
+            productName.textContent = product.name;
 
             //Creation de l'élément / balise description du produit.
-            var product_description = document.createElement("p");
-            product_description.textContent = product.description;
+            var productDescription = document.createElement("p");
+            productDescription.textContent = product.description;
 
-            product_article.appendChild(product_image);
-            product_article.appendChild(product_name);
-            product_article.appendChild(product_description);
+            productArticle.appendChild(productImage);
+            productArticle.appendChild(productName);
+            productArticle.appendChild(productDescription);
 
-            product_link.appendChild(product_article);
+            productLink.appendChild(productArticle);
 
-            items_selector.appendChild(product_link);
+            items_selector.appendChild(productLink);
 
         });
     } else if (false == products) {
         //Creation de l'élément / balise  erreur.
-        var error_message = document.createElement("h4");
-        error_message.textContent = "Aucun produit n'est disponble pour le moment.";
-        items_selector.appendChild(error_message);
+        var errorMessage = document.createElement("h4");
+        errorMessage.textContent = "Aucun produit n'est disponble pour le moment.";
+        items_selector.appendChild(errorMessage);
 
         alert("Aucun produit n'est disponble pour le moment.");
     }
