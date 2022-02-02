@@ -1,75 +1,64 @@
-//Initialisation du local storage
-let localStorageProduct = JSON.parse(localStorage.getItem("product"));
-console.table(localStorageProduct);
-//const emptyCart = document.querySelector("#cart__items");
+var cart = getLocalStorageCart();
+console.log(cart.length)
+if (cart && null != cart && "undefined" != cart && cart.length > 0) {
+  console.log(cart);
+  cart = JSON.parse(cart);
+  for ( let product in cart){
 
-// Si le panier est vide
-async function getCart(){
-if (localStorageProduct === null || localStorageProduct == 0) {
-    //const emptyCart = `<p>Votre panier est vide</p>`;
-    let emptyCart = document.querySelector("h1");
-    var errorMessage = document.createElement("header");
-        errorMessage.textContent = "Votre panier est vide";
-        emptyCart.appendChild(errorMessage);
-
-        //alert("Aucun produit n'est disponble pour le moment.");
-    alert("votre panier est vide");
-          console.log("Erreur");
-    emptyCart.innerHTML = "votre panier est vide";
-} else {
-for (let product  in localStorageProduct){
     // Insertion de l'élément "article"
     let productArticle = document.createElement("article");
     document.querySelector("#cart__items").appendChild(productArticle);
     productArticle.className = "cart__item";
-    productArticle.setAttribute('data-id', localStorageProduct[product].productId);
+    productArticle.setAttribute("data-id", "product.html?id=" + cart[product].productId);
+    
 
     // Insertion de l'élément "div"
-    let productDivImg = document.createElement("div");
-    productArticle.appendChild(productDivImg);
-    productDivImg.className = "cart__item__img";
+    let productDivPicture = document.createElement("div");
+    productArticle.appendChild(productDivPicture);
+    productDivPicture.classList.add("cart__item__img");
 
     // Insertion de l'image
     let productPicture = document.createElement("img");
-    productDivImg.appendChild(productPicture);
-    productPicture.src = localStorageProduct[product].productIdPicture;
-    productPicture.alt = localStorageProduct[product].productIdPictureAlt;
+    productDivPicture.appendChild(productPicture);
+    productPicture.setAttribute("src", product.imageUrl);
+    productPicture.setAttribute("alt", product.altTxt);
     
     // Insertion de l'élément "div"
     let productItemContent = document.createElement("div");
     productArticle.appendChild(productItemContent);
-    productItemContent.className = "cart__item__content";
+    productItemContent.classList.add( "cart__item__content");
 
     // Insertion de l'élément "div"
     let productItemContentTitlePrice = document.createElement("div");
     productItemContent.appendChild(productItemContentTitlePrice);
-    productItemContentTitlePrice.className = "cart__item__content__titlePrice";
+    productItemContentTitlePrice.classList.add ("cart__item__content__titlePrice");
     
     // Insertion du titre h3
     let productTitle = document.createElement("h2");
     productItemContentTitlePrice.appendChild(productTitle);
-    productTitle.innerHTML = localStorageProduct[product].nameOfProduct;
+    productTitle.textContent = cart[product].name;
 
     // Insertion de la couleur
-    let productColor = document.createElement("p");
-    productTitle.appendChild(productColor);
-    productColor.innerHTML = localStorageProduct[product].colorProduct;
-    productColor.style.fontSize = "20px";
+    let productColorSelector = document.createElement("p");
+    productTitle.appendChild(productColorSelector);
+    productColorSelector.textContent = cart[product].productColor;
+    productColorSelector.style.fontSize = "20px";
 
     // Insertion du prix
     let productPrice = document.createElement("p");
     productItemContentTitlePrice.appendChild(productPrice);
-    productPrice.innerHTML = localStorageProduct[product].priceOfProduct + " €";
+    //productPrice.innerHTML = cart[product].price;
+    productPrice.textContent = product.price + " €";
 
     // Insertion de l'élément "div"
     let productItemContentSettings = document.createElement("div");
     productItemContent.appendChild(productItemContentSettings);
-    productItemContentSettings.classList = "cart__item__content__settings";
+    productItemContentSettings.classList.add("cart__item__content__settings");
 
     // Insertion de l'élément "div"
     let productItemContentSettingsQuantity = document.createElement("div");
     productItemContentSettings.appendChild(productItemContentSettingsQuantity);
-    productItemContentSettingsQuantity.classList = "cart__item__content__settings__quantity";
+    productItemContentSettingsQuantity.classList.add("cart__item__content__settings__quantity");
     
     // Insertion de "Qté : "
     let productQte = document.createElement("p");
@@ -79,8 +68,8 @@ for (let product  in localStorageProduct){
     // Insertion de la quantité
     let productQuantity = document.createElement("input");
     productItemContentSettingsQuantity.appendChild(productQuantity);
-    productQuantity.value = localStorageProduct[product].quantityProduct;
-    productQuantity.className = "itemQuantity";
+    productQuantity.value = cart[product].productQuantity;
+    productQuantity.classList.add("itemQuantity");
     productQuantity.setAttribute("type", "number");
     productQuantity.setAttribute("min", "1");
     productQuantity.setAttribute("max", "100");
@@ -89,16 +78,38 @@ for (let product  in localStorageProduct){
     // Insertion de l'élément "div"
     let productItemContentSettingsDelete = document.createElement("div");
     productItemContentSettings.appendChild(productItemContentSettingsDelete);
-    productItemContentSettingsDelete.className = "cart__item__content__settings__delete";
+    productItemContentSettingsDelete.classList.add("cart__item__content__settings__delete");
 
     // Insertion de "p" supprimer
     let productSupprimer = document.createElement("p");
     productItemContentSettingsDelete.appendChild(productSupprimer);
-    productSupprimer.className = "deleteItem";
-    productSupprimer.innerHTML = "Supprimer";
-}
-}}
-getCart();
+    productSupprimer.classList.add ("deleteItem");
+    productSupprimer.innerHTML = "Supprimer";           
+  }
+  // Tu devras travailler ici
+  // Le but est de parcourir la variable cart qui est un tableau contenant les produits
+  // ajouter au panier.
+  // A chaque tour de parcours tu devra afficher le produits sur la page panier 
+  // en respect le design proposer
+  } else {
+  //Creation de l'élément / balise  erreur.
+  var errorMessageSelector = document.createElement("p");
+  errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
+
+  var shopLinkSelector = document.createElement("a");
+  shopLinkSelector.href = "index.html";
+  shopLinkSelector.textContent = "Boutique";
+
+  errorMessageSelector.appendChild(shopLinkSelector);
+
+  var cartItemsSelector = document.querySelector("#cart__items");
+  cartItemsSelector.appendChild(errorMessageSelector);
+  cartItemsSelector.style.textAlign = "center";
+  cartItemsSelector.style.fontSize = "1.5em";
+  var formSelector = document.querySelector(".cart__order");
+  formSelector.style.display = "none";
+  alert=("Votre panier est vide.");
+ }
 
 function getTotals(){
 
@@ -119,7 +130,7 @@ function getTotals(){
     totalPrice = 0;
 
     for (var i = 0; i < myLength; ++i) {
-        totalPrice += (elemsQtt[i].valueAsNumber * localStorageProduct[i].priceOfProduct);
+        totalPrice += (elemsQtt[i].valueAsNumber * cart[i].price);
     }
 
     let productTotalPrice = document.getElementById('totalPrice');
@@ -137,15 +148,15 @@ function modifyQtt() {
             event.preventDefault();
 
             //Selection de l'element à modifier en fonction de son id ET sa couleur
-            let quantityModif = localStorageProduct[k].quantityProduct;
+            let quantityModif = cart[k].quantityProduct;
             let qttModifValue = qttModif[k].valueAsNumber;
             
-            const localStorageCart = localStorageProduct.find((el) => el.qttModifValue !== quantityModif);
+            const localStorageCart = cart.find((el) => el.qttModifValue !== quantityModif);
 
             localStorageCart.quantityProduct = qttModifValue;
-            localStorageProduct[k].quantityProduct = localStorageCart.quantityProduct;
+            cart[k].quantityProduct = localStorageCart.quantityProduct;
 
-            localStorage.setItem("product", JSON.stringify(localStorageProduct));
+            localStorage.setItem("product", JSON.stringify(cart));
         
             // refresh rapide
             location.reload();
@@ -163,12 +174,12 @@ function deleteProduct() {
             event.preventDefault();
 
             //Selection de l'element à supprimer en fonction de son id ET sa couleur
-            let idDelete = localStorageProduct[j].productId;
-            let colorDelete = localStorageProduct[j].colorProduct;
+            let idDelete = cart[j].productId;
+            let colorDelete = cart[j].productColor;
 
-            localStorageProduct = localStorageProduct.filter( el => el.productId !== idDelete || el.colorProduct !== colorDelete );
+            localStorageProduct = cart.filter( el => el.productId !== idDelete || el.productColor !== colorDelete );
             
-            localStorage.setItem("product", JSON.stringify(localStorageProduct));
+            localStorage.setItem("cart", JSON.stringify(cart));
 
             //Alerte produit supprimé et refresh
             alert("Ce produit a bien été supprimé du panier");
@@ -283,4 +294,4 @@ function postForm() {
       })
   })
 }
-postForm();
+//postForm();
