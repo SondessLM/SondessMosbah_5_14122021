@@ -7,23 +7,23 @@
     if (products) {
         products.forEach(function (product) {
 
-            //Creation de l'élément / balise lien du produit.
+            //Creation de l'element / balise lien du produit.
             var productLink = document.createElement("a");
             productLink.setAttribute("href", "product.html?id=" + product._id);
 
-            //Creation de l'élément / balise article du produit.
+            //Creation de l'element / balise article du produit.
             var productArticle = document.createElement("article");
 
-            //Creation de l'élément / balise image du produit.
+            //Creation de l'element / balise image du produit.
             var productImage = document.createElement("img");
             productImage.setAttribute("src", product.imageUrl);
             productImage.setAttribute("alt", product.altTxt);
 
-            //Creation de l'élément / balise nom du produit.
+            //Creation de l'element / balise nom du produit.
             var productName = document.createElement("h3");
             productName.textContent = product.name;
 
-            //Creation de l'élément / balise description du produit.
+            //Creation de l'element / balise description du produit.
             var productDescription = document.createElement("p");
             productDescription.textContent = product.description;
 
@@ -37,7 +37,7 @@
 
         });
     } else if (false == products) {
-        //Creation de l'élément / balise  erreur.
+        //Creation de l'element / balise  erreur.
         var errorMessage = document.createElement("h4");
         errorMessage.textContent = "Aucun produit n'est disponble pour le moment.";
         items_selector.appendChild(errorMessage);

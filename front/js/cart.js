@@ -1,15 +1,19 @@
 var cart = getLocalStorageCart();
 console.log(cart.length)
 if (cart && null != cart && "undefined" != cart && cart.length > 0) {
-  console.log(cart);
+  console.log(cart.length);
   cart = JSON.parse(cart);
-  for ( let product in cart){
+ // var cartItemsSelector = document.querySelector("#cart__items");
+  cart.forEach(async function (cartItem){
+  //for ( let product in cart){
+    let product = await getProduct(cartItem.productId);
 
     // Insertion de l'élément "article"
     let productArticle = document.createElement("article");
     document.querySelector("#cart__items").appendChild(productArticle);
-    productArticle.className = "cart__item";
-    productArticle.setAttribute("data-id", "product.html?id=" + cart[product].productId);
+    productArticle.classList.add("cart__item");
+    productArticle.setAttribute("data-id", "product.html?id=" + cartItem.productId);
+    productArticle.setAttribute("ddata-color", "product.html?id=" + cartItem.productColor);
     
 
     // Insertion de l'élément "div"
@@ -36,19 +40,19 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
     // Insertion du titre h3
     let productTitle = document.createElement("h2");
     productItemContentTitlePrice.appendChild(productTitle);
-    productTitle.textContent = cart[product].name;
+    productTitle.textContent = product.name;
 
     // Insertion de la couleur
     let productColorSelector = document.createElement("p");
     productTitle.appendChild(productColorSelector);
-    productColorSelector.textContent = cart[product].productColor;
+    productColorSelector.textContent = cartItem.productColor;
     productColorSelector.style.fontSize = "20px";
 
     // Insertion du prix
     let productPrice = document.createElement("p");
     productItemContentTitlePrice.appendChild(productPrice);
-    //productPrice.innerHTML = cart[product].price;
-    productPrice.textContent = product.price + " €";
+    productPrice.innerHTML = product.price + " €" ;
+    //productPrice.textContent = product.price + " €";
 
     // Insertion de l'élément "div"
     let productItemContentSettings = document.createElement("div");
@@ -68,7 +72,7 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
     // Insertion de la quantité
     let productQuantity = document.createElement("input");
     productItemContentSettingsQuantity.appendChild(productQuantity);
-    productQuantity.value = cart[product].productQuantity;
+    productQuantity.value = cartItem.productQuantity;
     productQuantity.classList.add("itemQuantity");
     productQuantity.setAttribute("type", "number");
     productQuantity.setAttribute("min", "1");
@@ -81,11 +85,11 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
     productItemContentSettingsDelete.classList.add("cart__item__content__settings__delete");
 
     // Insertion de "p" supprimer
-    let productSupprimer = document.createElement("p");
-    productItemContentSettingsDelete.appendChild(productSupprimer);
-    productSupprimer.classList.add ("deleteItem");
-    productSupprimer.innerHTML = "Supprimer";           
-  }
+    let buttonDelete = document.createElement("p");
+    productItemContentSettingsDelete.appendChild(buttonDelete);
+    buttonDelete.classList.add ("deleteItem");
+    buttonDelete.innerHTML = "Supprimer";           
+  });
   // Tu devras travailler ici
   // Le but est de parcourir la variable cart qui est un tableau contenant les produits
   // ajouter au panier.
@@ -110,27 +114,30 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
   formSelector.style.display = "none";
   alert=("Votre panier est vide.");
  }
-
+ 
 function getTotals(){
 
     // Récupération du total des quantités
-    var elemsQtt = document.getElementsByClassName('itemQuantity');
-    var myLength = elemsQtt.length,
-    totalQtt = 0;
+   
+    var productQuantity = document.getElementsByClassName('itemQuantity');
+     totalQuantity = 0;
+     console.log (productQuantity);
 
-    for (var i = 0; i < myLength; ++i) {
-        totalQtt += elemsQtt[i].valueAsNumber;
-    }
+    for (var i = 0; i < productQuantity.length ; ++i) {
+        totalQuantity += productQuantity.valueAsNumber;
+        }
+       
+   
 
-    let productTotalQuantity = document.getElementById('totalQuantity');
-    productTotalQuantity.innerHTML = totalQtt;
-    console.log(totalQtt);
-
+     let productTotalQuantity = document.querySelector('#totalQuantity');
+     productTotalQuantity.innerHTML = totalQuantity;
+     console.log(totalQuantity);
+  
     // Récupération du prix total
-    totalPrice = 0;
+     totalPrice = 0;
 
-    for (var i = 0; i < myLength; ++i) {
-        totalPrice += (elemsQtt[i].valueAsNumber * cart[i].price);
+    for (var i = 0; i < productQuantity.length; ++i) {
+        totalPrice += (productQuantity[i].valueAsNumber * cart[i].price);
     }
 
     let productTotalPrice = document.getElementById('totalPrice');
@@ -140,21 +147,21 @@ function getTotals(){
 getTotals();
 
 // Modification d'une quantité de produit
-function modifyQtt() {
-    let qttModif = document.querySelectorAll(".itemQuantity");
+function quantityModification() {
+    let ModifyQuantity = document.querySelectorAll(".itemQuantity");
 
-    for (let k = 0; k < qttModif.length; k++){
-        qttModif[k].addEventListener("change" , (event) => {
+    for (let k = 0; k < ModifyQuantity.length; k++){
+        ModifyQuantity[k].addEventListener("change" , (event) => {
             event.preventDefault();
 
             //Selection de l'element à modifier en fonction de son id ET sa couleur
-            let quantityModif = cart[k].quantityProduct;
-            let qttModifValue = qttModif[k].valueAsNumber;
+            let quantityModif = cartItem[k].productQuantity;
+            let ModifyQuantityValue = ModifyQuantity[k].valueAsNumber;
             
-            const localStorageCart = cart.find((el) => el.qttModifValue !== quantityModif);
+            const localStorageCart = cart.find((el) => el.ModifyQuantityValue !== quantityModif);
 
-            localStorageCart.quantityProduct = qttModifValue;
-            cart[k].quantityProduct = localStorageCart.quantityProduct;
+            localStorageCart.productQuantity = ModifyQuantityValue;
+            cartItem[k].productQuantity = localStorageCart.productQuantity;
 
             localStorage.setItem("product", JSON.stringify(cart));
         
@@ -163,13 +170,13 @@ function modifyQtt() {
         })
     }
 }
-modifyQtt();
+quantityModification();
 
 // Suppression d'un produit
 function deleteProduct() {
     let buttonDelete = document.querySelectorAll(".deleteItem");
 
-    for (let j = 0; j < buttonDelete.length; j++){
+    for (let j = 0; j < buttonDelete.value; j++){
         buttonDelete[j].addEventListener("click" , (event) => {
             event.preventDefault();
 
@@ -177,7 +184,7 @@ function deleteProduct() {
             let idDelete = cart[j].productId;
             let colorDelete = cart[j].productColor;
 
-            localStorageProduct = cart.filter( el => el.productId !== idDelete || el.productColor !== colorDelete );
+            cart = cart.filter( el => el.productId !== idDelete || el.productColor !== colorDelete );
             
             localStorage.setItem("cart", JSON.stringify(cart));
 
@@ -276,22 +283,27 @@ function postForm() {
     //ajouter dans un objet
     let sendForm = {
       contact,
-           
+      
     }
 
     let options = {
       method: 'POST',
       body: JSON.stringify(sendForm),
-      
-    }
+      headers: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+    };
+    
 
     fetch("http://localhost:3000/api/products/order", options) 
       .then(response => response.json())
       .then(product => {
+          const orderId = product.orderId;
         if (validControl()) {
-          document.location.href = 'confirmation.html' + product.orderId;
+          document.location.href = 'confirmation.html' + '?orderId=' + orderId;
         }
       })
   })
 }
-//postForm();
+postForm();

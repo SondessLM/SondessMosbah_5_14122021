@@ -1,8 +1,10 @@
-function main(){
-    const orderId = document.getElementById("orderId");
-    orderId.innerText = localStorage.getItem("orderId");
-    console.log(localStorage.getItem("orderId"))
-    localStorage.clear();
-}
+// recuperation du lien et de l'orderId
+let orderId = new URLSearchParams(window.location.search).get('orderId');
 
-main();
+//insertion de l'orderId dans l'HTML
+let orderNumber = document.querySelector('#orderId');
+//orderNumber.innerHTML = orderId + ' <br> Merci de votre commande !';
+
+//suppression du localStorage
+let removeStorage = window.localStorage;
+removeStorage.clear();
