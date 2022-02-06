@@ -3,6 +3,7 @@ console.log(cart.length)
 if (cart && null != cart && "undefined" != cart && cart.length > 0) {
   console.log(cart.length);
   cart = JSON.parse(cart);
+  console.table(cart);
  // var cartItemsSelector = document.querySelector("#cart__items");
   cart.forEach(async function (cartItem){
   //for ( let product in cart){
@@ -51,7 +52,7 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
     // Insertion du prix
     let productPrice = document.createElement("p");
     productItemContentTitlePrice.appendChild(productPrice);
-    productPrice.innerHTML = product.price + " €" ;
+    productPrice.textContent = product.price + " €" ;
     //productPrice.textContent = product.price + " €";
 
     // Insertion de l'élément "div"
@@ -67,7 +68,7 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
     // Insertion de "Qté : "
     let productQte = document.createElement("p");
     productItemContentSettingsQuantity.appendChild(productQte);
-    productQte.innerHTML = "Qté : ";
+    productQte.textContent = "Qté : ";
 
     // Insertion de la quantité
     let productQuantity = document.createElement("input");
@@ -88,7 +89,7 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
     let buttonDelete = document.createElement("p");
     productItemContentSettingsDelete.appendChild(buttonDelete);
     buttonDelete.classList.add ("deleteItem");
-    buttonDelete.innerHTML = "Supprimer";           
+    buttonDelete.textContent = "Supprimer";           
   });
   // Tu devras travailler ici
   // Le but est de parcourir la variable cart qui est un tableau contenant les produits
@@ -118,192 +119,195 @@ if (cart && null != cart && "undefined" != cart && cart.length > 0) {
 function getTotals(){
 
     // Récupération du total des quantités
-   
-    var productQuantity = document.getElementsByClassName('itemQuantity');
-     totalQuantity = 0;
-     console.log (productQuantity);
-
-    for (var i = 0; i < productQuantity.length ; ++i) {
-        totalQuantity += productQuantity.valueAsNumber;
-        }
-       
-   
-
+    
+   // let productQuantity = document.getElementsByName('itemQuantity');
+    var productQuantity= document.getElementsByName('itemQuantity');
+     totalQuantity = 0; 
+     //console.log(productQuantity.length);
+      for (var i = 0; i < productQuantity.length ; ++i) {
+           //productQuantity.value = cart[i].productQuantity;
+           //console.log(productQuantity.value);
+           totalQuantity += quantityProducts.value;
+            console.log(totalQuantity);
+      }      
      let productTotalQuantity = document.querySelector('#totalQuantity');
-     productTotalQuantity.innerHTML = totalQuantity;
+     productTotalQuantity.textContent = totalQuantity;
      console.log(totalQuantity);
-  
+      
     // Récupération du prix total
      totalPrice = 0;
-
-    for (var i = 0; i < productQuantity.length; ++i) {
-        totalPrice += (productQuantity[i].valueAsNumber * cart[i].price);
-    }
-
+       for (var i = 0; i <productQuantity.length; ++i) {
+        totalPrice += (totalQuantity * cart.price);
+       }
     let productTotalPrice = document.getElementById('totalPrice');
-    productTotalPrice.innerHTML = totalPrice;
+    productTotalPrice.textContent = totalPrice;
     console.log(totalPrice);
-}
+ }
 getTotals();
 
-// Modification d'une quantité de produit
-function quantityModification() {
-    let ModifyQuantity = document.querySelectorAll(".itemQuantity");
+// // Modification d'une quantité de produit
+// function quantityModification() {
+//     let ModifyQuantity = document.querySelectorAll(".itemQuantity");
 
-    for (let k = 0; k < ModifyQuantity.length; k++){
-        ModifyQuantity[k].addEventListener("change" , (event) => {
-            event.preventDefault();
+//     for (let j = 0; j < ModifyQuantity.length; j++){
+//         ModifyQuantity[j].addEventListener("change" , (event) => {
+//             event.preventDefault();
 
-            //Selection de l'element à modifier en fonction de son id ET sa couleur
-            let quantityModif = cartItem[k].productQuantity;
-            let ModifyQuantityValue = ModifyQuantity[k].valueAsNumber;
+//             //Selection de l'element à modifier en fonction de son id ET sa couleur
+//             let quantityModif = cart[j].productQuantity;
+//             let ModifyQuantityValue = ModifyQuantity[j].valueAsNumber;
             
-            const localStorageCart = cart.find((el) => el.ModifyQuantityValue !== quantityModif);
+//             const localStorageCart = cart.find((el) => el.ModifyQuantityValue !== quantityModif);
 
-            localStorageCart.productQuantity = ModifyQuantityValue;
-            cartItem[k].productQuantity = localStorageCart.productQuantity;
+//             localStorageCart.productQuantity = ModifyQuantityValue;
+//             cart[j].productQuantity = localStorageCart.productQuantity;
 
-            localStorage.setItem("product", JSON.stringify(cart));
+//             localStorage.setItem("cart", JSON.stringify(cart));
         
-            // refresh rapide
-            location.reload();
-        })
-    }
-}
-quantityModification();
+//             // refresh rapide
+//             location.reload();
+//         })
+//     }
+// }
+// quantityModification();
 
-// Suppression d'un produit
-function deleteProduct() {
-    let buttonDelete = document.querySelectorAll(".deleteItem");
+// //Suppression d'un produit
+// function deleteProduct() {
+//     let deleteButton = document.querySelectorAll(".deleteItem");
+//      for (let k = 0; k < deleteButton.value; k++){
+//       deleteButton[k].addEventListener("click" , (event) => {
+//             event.preventDefault();
 
-    for (let j = 0; j < buttonDelete.value; j++){
-        buttonDelete[j].addEventListener("click" , (event) => {
-            event.preventDefault();
+//             //Selection de l'element à supprimer en fonction de son id ET sa couleur
+//             let deleteId = cart[k].productId;
+//             let deleteColor = cart[k].productColor;
 
-            //Selection de l'element à supprimer en fonction de son id ET sa couleur
-            let idDelete = cart[j].productId;
-            let colorDelete = cart[j].productColor;
-
-            cart = cart.filter( el => el.productId !== idDelete || el.productColor !== colorDelete );
+//             cart = cart.filter( el => el.productId !== deleteId || el.productColor !== deleteColor );
             
-            localStorage.setItem("cart", JSON.stringify(cart));
+//             localStorage.setItem("cart", JSON.stringify(cart));
 
-            //Alerte produit supprimé et refresh
-            alert("Ce produit a bien été supprimé du panier");
-            location.reload();
-        })
-    }
-}
-deleteProduct();
+//             //Alerte produit supprimé et refresh
+//             alert("Ce produit a bien été supprimé du panier");
+//             location.reload();
+//         })
+//     }
+// }
+// deleteProduct();
 
-//push form
-function postForm() {
-  let orderId = document.querySelector('#order');
-  orderId.addEventListener('click', (event) => {
-   event.preventDefault();
+// //push form
+// function postForm() {
+//   let orderId = document.querySelector('#order');
+//   orderId.addEventListener('click', (event) => {
+//    event.preventDefault();
 
-  //create form in object
- let contact = {
- firstName: document.querySelector('#firstName').value,
- lastName: document.querySelector('#lastName').value,
- address: document.querySelector('#address').value,
- city: document.querySelector('#city').value,
- email: document.querySelector('#email').value,
-    }
+//   //create form in object
+//  let contact = {
+//  firstName: document.querySelector('#firstName').value,
+//  lastName: document.querySelector('#lastName').value,
+//  address: document.querySelector('#address').value,
+//  city: document.querySelector('#city').value,
+//  email: document.querySelector('#email').value,
+//     }
 
-//valid informations input
-    //FirstName
-    function firstNameControl() {
-      let firstNameValid = contact.firstName;
-      if (/^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,20}$/.test(firstNameValid)) {
-        let firstNameErrorMsg = document.querySelector('#firstNameErrorMsg');
-        firstNameErrorMsg.style.display = 'none';
-        return true;
-      } else {
-        firstNameErrorMsg.innerHTML = "Veuillez renseigner votre prénom.";
-      }
-    }
+// //valid informations input
+//     //FirstName
+//     function firstNameControl() {
+//       let firstNameValid = contact.firstName;
+//       if (/^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,20}$/.test(firstNameValid)) {
+//         let firstNameErrorMsg = document.querySelector('#firstNameErrorMsg');
+//         firstNameErrorMsg.style.display = 'none';
+//         return true;
+//       } else {
+//         firstNameErrorMsg.textcontent = "Veuillez renseigner votre prénom.";
+//       }
+//     }
 
-    //LastName
-    function lastNameControl() {
-      const lastNameValid = contact.lastName;
-      if (/^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,20}$/.test(lastNameValid)) {
-        let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
-        lastNameErrorMsg.style.display = 'none';
-        return true;
-      } else {
-        lastNameErrorMsg.innerHTML = "Veuillez renseigner votre nom.";
-      }
-    }
+//     //LastName
+//     function lastNameControl() {
+//       const lastNameValid = contact.lastName;
+//       if (/^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,20}$/.test(lastNameValid)) {
+//         let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
+//         lastNameErrorMsg.style.display = 'none';
+//         return true;
+//       } else {
+//         lastNameErrorMsg.textContent = "Veuillez renseigner votre nom.";
+//       }
+//     }
 
-    //Adress
-    function addressControl() {
-      const validAdress = contact.address;
-      if (/^(([a-zA-ZÀ-ÿ0-9]+[\s\-]{1}[a-zA-ZÀ-ÿ0-9]+)){1,10}$/.test(validAdress)) {
-        let addressErrorMsg = document.getElementById('addressErrorMsg');
-        addressErrorMsg.style.display = 'none';
-        return true;
-      } else {
-        addressErrorMsg.innerHTML = "Veuillez renseigner votre adresse de livraison.";
-      }
-    }
+//     //Adress
+//     function addressControl() {
+//       const validAdress = contact.address;
+//       if (/^(([a-zA-ZÀ-ÿ0-9]+[\s\-]{1}[a-zA-ZÀ-ÿ0-9]+)){1,10}$/.test(validAdress)) {
+//         let addressErrorMsg = document.getElementById('addressErrorMsg');
+//         addressErrorMsg.style.display = 'none';
+//         return true;
+//       } else {
+//         addressErrorMsg.textContent = "Veuillez renseigner votre adresse de livraison.";
+//       }
+//     }
 
-    // City
-    function cityControl() {
-      const cityValid = contact.city;
-      if (/^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,10}$/.test(cityValid)) {
-        let cityErrorMsg = document.getElementById('cityErrorMsg');
-        cityErrorMsg.style.display = 'none';
-        return true;
-      } else {
-        cityErrorMsg.innerHTML = "Veuillez renseigner votre ville.";
-      }
-    }
-    //Email
-    function emailControl() {
-      const emailValid = contact.email;
-      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValid)) {
-        let emailErrorMsg = document.getElementById('emailErrorMsg');
-        emailErrorMsg.style.display = 'none';
-        return true;
-      } else {
-        emailErrorMsg.innerHTML = "Erreur ! Email non valide";
-      }
-    }
+//     // City
+//     function cityControl() {
+//       const cityValid = contact.city;
+//       if (/^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,10}$/.test(cityValid)) {
+//         let cityErrorMsg = document.getElementById('cityErrorMsg');
+//         cityErrorMsg.style.display = 'none';
+//         return true;
+//       } else {
+//         cityErrorMsg.textContent = "Veuillez renseigner votre ville.";
+//       }
+//     }
+//     //Email
+//     function emailControl() {
+//       const emailValid = contact.email;
+//       if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValid)) {
+//         let emailErrorMsg = document.getElementById('emailErrorMsg');
+//         emailErrorMsg.style.display = 'none';
+//         return true;
+//       } else {
+//         emailErrorMsg.textContent = "Erreur ! Email non valide";
+//       }
+//     }
 
-    // localStorage
-    function validControl() {
-      if (firstNameControl() && lastNameControl() && addressControl() && cityControl() && emailControl()) {
-        return true;
-      } else {
-        alert('veuillez vérifier les données du formulaire')
-      }
-    }
+//     // localStorage
+//     function validControl() {
+//       if (firstNameControl() && lastNameControl() && addressControl() && cityControl() && emailControl()) {
+//         return true;
+//       } else {
+//         alert('veuillez vérifier les données du formulaire')
+//       }
+//     }
+// //Construction d'un array depuis le local storage
+// let productId = [];
+// for (let i = 0; i<cart.length;i++) {
+//     productId.push(cart[i].productId);
+// }
+// console.log(productId);
+//     //ajouter dans un objet
+//     const sendForm = {
+//       contact,
+//       product: productId,
+//     }
 
-    //ajouter dans un objet
-    let sendForm = {
-      contact,
-      
-    }
-
-    let options = {
-      method: 'POST',
-      body: JSON.stringify(sendForm),
-      headers: {
-        Accept: 'application/json',
-        'Content-type': 'application/json',
-      },
-    };
+//     const options = {
+//       method: 'POST',
+//       body: JSON.stringify(sendForm),
+//       headers: {
+//         Accept: 'application/json',
+//         'Content-type': 'application/json',
+//       },
+//     };
     
 
-    fetch("http://localhost:3000/api/products/order", options) 
-      .then(response => response.json())
-      .then(product => {
-          const orderId = product.orderId;
-        if (validControl()) {
-          document.location.href = 'confirmation.html' + '?orderId=' + orderId;
-        }
-      })
-  })
-}
-postForm();
+//     fetch("http://localhost:3000/api/products/order", options) 
+//       .then(response => response.json())
+//       .then(product => {
+//           const orderId = product.orderId;
+//         if (validControl()) {
+//           document.location.href = 'confirmation.html' + '?orderId=' + orderId;
+//         }
+//       })
+//   })
+// }
+// postForm();
+      
