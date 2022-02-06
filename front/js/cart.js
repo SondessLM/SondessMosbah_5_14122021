@@ -1,149 +1,165 @@
 var cart = getLocalStorageCart();
-console.log(cart.length)
-if (cart && null != cart && "undefined" != cart && cart.length > 0) {
-  console.log(cart.length);
-  cart = JSON.parse(cart);
-  console.table(cart);
- // var cartItemsSelector = document.querySelector("#cart__items");
-  cart.forEach(async function (cartItem){
-  //for ( let product in cart){
-    let product = await getProduct(cartItem.productId);
 
-    // Insertion de l'élément "article"
-    let productArticle = document.createElement("article");
-    document.querySelector("#cart__items").appendChild(productArticle);
-    productArticle.classList.add("cart__item");
-    productArticle.setAttribute("data-id", "product.html?id=" + cartItem.productId);
-    productArticle.setAttribute("ddata-color", "product.html?id=" + cartItem.productColor);
-    
+displayProductInCart();
 
-    // Insertion de l'élément "div"
-    let productDivPicture = document.createElement("div");
-    productArticle.appendChild(productDivPicture);
-    productDivPicture.classList.add("cart__item__img");
-
-    // Insertion de l'image
-    let productPicture = document.createElement("img");
-    productDivPicture.appendChild(productPicture);
-    productPicture.setAttribute("src", product.imageUrl);
-    productPicture.setAttribute("alt", product.altTxt);
-    
-    // Insertion de l'élément "div"
-    let productItemContent = document.createElement("div");
-    productArticle.appendChild(productItemContent);
-    productItemContent.classList.add( "cart__item__content");
-
-    // Insertion de l'élément "div"
-    let productItemContentTitlePrice = document.createElement("div");
-    productItemContent.appendChild(productItemContentTitlePrice);
-    productItemContentTitlePrice.classList.add ("cart__item__content__titlePrice");
-    
-    // Insertion du titre h3
-    let productTitle = document.createElement("h2");
-    productItemContentTitlePrice.appendChild(productTitle);
-    productTitle.textContent = product.name;
-
-    // Insertion de la couleur
-    let productColorSelector = document.createElement("p");
-    productTitle.appendChild(productColorSelector);
-    productColorSelector.textContent = cartItem.productColor;
-    productColorSelector.style.fontSize = "20px";
-
-    // Insertion du prix
-    let productPrice = document.createElement("p");
-    productItemContentTitlePrice.appendChild(productPrice);
-    productPrice.textContent = product.price + " €" ;
-    //productPrice.textContent = product.price + " €";
-
-    // Insertion de l'élément "div"
-    let productItemContentSettings = document.createElement("div");
-    productItemContent.appendChild(productItemContentSettings);
-    productItemContentSettings.classList.add("cart__item__content__settings");
-
-    // Insertion de l'élément "div"
-    let productItemContentSettingsQuantity = document.createElement("div");
-    productItemContentSettings.appendChild(productItemContentSettingsQuantity);
-    productItemContentSettingsQuantity.classList.add("cart__item__content__settings__quantity");
-    
-    // Insertion de "Qté : "
-    let productQte = document.createElement("p");
-    productItemContentSettingsQuantity.appendChild(productQte);
-    productQte.textContent = "Qté : ";
-
-    // Insertion de la quantité
-    let productQuantity = document.createElement("input");
-    productItemContentSettingsQuantity.appendChild(productQuantity);
-    productQuantity.value = cartItem.productQuantity;
-    productQuantity.classList.add("itemQuantity");
-    productQuantity.setAttribute("type", "number");
-    productQuantity.setAttribute("min", "1");
-    productQuantity.setAttribute("max", "100");
-    productQuantity.setAttribute("name", "itemQuantity");
-
-    // Insertion de l'élément "div"
-    let productItemContentSettingsDelete = document.createElement("div");
-    productItemContentSettings.appendChild(productItemContentSettingsDelete);
-    productItemContentSettingsDelete.classList.add("cart__item__content__settings__delete");
-
-    // Insertion de "p" supprimer
-    let buttonDelete = document.createElement("p");
-    productItemContentSettingsDelete.appendChild(buttonDelete);
-    buttonDelete.classList.add ("deleteItem");
-    buttonDelete.textContent = "Supprimer";           
-  });
-  // Tu devras travailler ici
-  // Le but est de parcourir la variable cart qui est un tableau contenant les produits
-  // ajouter au panier.
-  // A chaque tour de parcours tu devra afficher le produits sur la page panier 
-  // en respect le design proposer
-  } else {
-  //Creation de l'élément / balise  erreur.
-  var errorMessageSelector = document.createElement("p");
-  errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
-
-  var shopLinkSelector = document.createElement("a");
-  shopLinkSelector.href = "index.html";
-  shopLinkSelector.textContent = "Boutique";
-
-  errorMessageSelector.appendChild(shopLinkSelector);
-
-  var cartItemsSelector = document.querySelector("#cart__items");
-  cartItemsSelector.appendChild(errorMessageSelector);
-  cartItemsSelector.style.textAlign = "center";
-  cartItemsSelector.style.fontSize = "1.5em";
-  var formSelector = document.querySelector(".cart__order");
-  formSelector.style.display = "none";
-  alert=("Votre panier est vide.");
- }
- 
-function getTotals(){
-
-    // Récupération du total des quantités
-    
-   // let productQuantity = document.getElementsByName('itemQuantity');
-    var productQuantity= document.getElementsByName('itemQuantity');
-     totalQuantity = 0; 
-     //console.log(productQuantity.length);
-      for (var i = 0; i < productQuantity.length ; ++i) {
-           //productQuantity.value = cart[i].productQuantity;
-           //console.log(productQuantity.value);
-           totalQuantity += quantityProducts.value;
-            console.log(totalQuantity);
-      }      
-     let productTotalQuantity = document.querySelector('#totalQuantity');
-     productTotalQuantity.textContent = totalQuantity;
-     console.log(totalQuantity);
+function displayProductInCart(){
+  
+  if (cart && null != cart && "undefined" != cart && cart.length > 0) {
+    cart = JSON.parse(cart);
+    // var cartItemsSelector = document.querySelector("#cart__items");
+    cart.forEach(async function (cartItem){
+    //for ( let product in cart){
+      let product = await getProduct(cartItem.productId);
+  
+      // Insertion de l'élément "article"
+      let productArticle = document.createElement("article");
+      document.querySelector("#cart__items").appendChild(productArticle);
+      productArticle.classList.add("cart__item");
+      productArticle.setAttribute("data-id", "product.html?id=" + cartItem.productId);
+      productArticle.setAttribute("ddata-color", "product.html?id=" + cartItem.productColor);
       
-    // Récupération du prix total
-     totalPrice = 0;
-       for (var i = 0; i <productQuantity.length; ++i) {
-        totalPrice += (totalQuantity * cart.price);
-       }
-    let productTotalPrice = document.getElementById('totalPrice');
-    productTotalPrice.textContent = totalPrice;
-    console.log(totalPrice);
+  
+      // Insertion de l'élément "div"
+      let productDivPicture = document.createElement("div");
+      productArticle.appendChild(productDivPicture);
+      productDivPicture.classList.add("cart__item__img");
+  
+      // Insertion de l'image
+      let productPicture = document.createElement("img");
+      productDivPicture.appendChild(productPicture);
+      productPicture.setAttribute("src", product.imageUrl);
+      productPicture.setAttribute("alt", product.altTxt);
+      
+      // Insertion de l'élément "div"
+      let productItemContent = document.createElement("div");
+      productArticle.appendChild(productItemContent);
+      productItemContent.classList.add( "cart__item__content");
+  
+      // Insertion de l'élément "div"
+      let productItemContentTitlePrice = document.createElement("div");
+      productItemContent.appendChild(productItemContentTitlePrice);
+      productItemContentTitlePrice.classList.add ("cart__item__content__titlePrice");
+      
+      // Insertion du titre h3
+      let productTitle = document.createElement("h2");
+      productItemContentTitlePrice.appendChild(productTitle);
+      productTitle.textContent = product.name;
+  
+      // Insertion de la couleur
+      let productColorSelector = document.createElement("p");
+      productTitle.appendChild(productColorSelector);
+      productColorSelector.textContent = cartItem.productColor;
+      productColorSelector.style.fontSize = "20px";
+  
+      // Insertion du prix
+      let productPrice = document.createElement("p");
+      productItemContentTitlePrice.appendChild(productPrice);
+      productPrice.textContent = product.price + " €" ;
+      //productPrice.textContent = product.price + " €";
+  
+      // Insertion de l'élément "div"
+      let productItemContentSettings = document.createElement("div");
+      productItemContent.appendChild(productItemContentSettings);
+      productItemContentSettings.classList.add("cart__item__content__settings");
+  
+      // Insertion de l'élément "div"
+      let productItemContentSettingsQuantity = document.createElement("div");
+      productItemContentSettings.appendChild(productItemContentSettingsQuantity);
+      productItemContentSettingsQuantity.classList.add("cart__item__content__settings__quantity");
+      
+      // Insertion de "Qté : "
+      let productQte = document.createElement("p");
+      productItemContentSettingsQuantity.appendChild(productQte);
+      productQte.textContent = "Qté : ";
+  
+      // Insertion de la quantité
+      let productQuantity = document.createElement("input");
+      productItemContentSettingsQuantity.appendChild(productQuantity);
+      productQuantity.value = cartItem.productQuantity;
+      productQuantity.classList.add("itemQuantity");
+      productQuantity.setAttribute("type", "number");
+      productQuantity.setAttribute("min", "1");
+      productQuantity.setAttribute("max", "100");
+      productQuantity.setAttribute("name", "itemQuantity");
+  
+      // Insertion de l'élément "div"
+      let productItemContentSettingsDelete = document.createElement("div");
+      productItemContentSettings.appendChild(productItemContentSettingsDelete);
+      productItemContentSettingsDelete.classList.add("cart__item__content__settings__delete");
+  
+      // Insertion de "p" supprimer
+      let buttonDelete = document.createElement("p");
+      productItemContentSettingsDelete.appendChild(buttonDelete);
+      buttonDelete.classList.add ("deleteItem");
+      buttonDelete.textContent = "Supprimer";           
+    });
+    var productQuantity= document.querySelectorAll('.itemQuantity');
+    totalQuantity = 0; 
+    console.log(productQuantity);
+     for (var i = 0; i < productQuantity.length ; i++) {
+          //productQuantity.value = cart[i].productQuantity;
+          console.log(productQuantity[i].value);
+          totalQuantity += productQuantity[i].val();
+         // console.log(totalQuantity);
+     }      
+    let productTotalQuantity = document.querySelector('#totalQuantity');
+    productTotalQuantity.textContent = totalQuantity; 
+    } else {
+    //Creation de l'élément / balise  erreur.
+    var errorMessageSelector = document.createElement("p");
+    errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
+  
+    var shopLinkSelector = document.createElement("a");
+    shopLinkSelector.href = "index.html";
+    shopLinkSelector.textContent = "Boutique";
+  
+    errorMessageSelector.appendChild(shopLinkSelector);
+  
+    var cartItemsSelector = document.querySelector("#cart__items");
+    cartItemsSelector.appendChild(errorMessageSelector);
+    cartItemsSelector.style.textAlign = "center";
+    cartItemsSelector.style.fontSize = "1.5em";
+    var formSelector = document.querySelector(".cart__order");
+    formSelector.style.display = "none";
+    alert=("Votre panier est vide.");
+   }
+  
+}
+
+function getTotals(){ 
+  totalQuantity = 0; 
+  if (cart && null != cart && "undefined" != cart && cart.length > 0) {
+    cart = JSON.parse(cart);
+    cart.forEach(function (cartItem){
+      totalQuantity += cartItem.productQuantity;
+    });
+  } 
+  console.log(totalQuantity);
+  //  // Récupération du total des quantités 
+  //  // let productQuantity = document.getElementsByName('itemQuantity');
+  //   var productQuantity= document.getElementsByClassName('itemQuantity');
+     
+  //    console.log(productQuantity.length);
+  //     for (var i = 0; i < productQuantity.length ; i++) {
+  //          //productQuantity.value = cart[i].productQuantity;
+  //          console.log(productQuantity[i].value);
+  //          totalQuantity += productQuantity[i].val();
+  //         // console.log(totalQuantity);
+  //     }      
+  //    let productTotalQuantity = document.querySelector('#totalQuantity');
+  //    productTotalQuantity.textContent = totalQuantity;
+  //   // console.log(totalQuantity);
+      
+  //   // Récupération du prix total
+  //    totalPrice = 0;
+  //      for (var i = 0; i <productQuantity.length; ++i) {
+  //       totalPrice += (totalQuantity * cart.price);
+  //      }
+  //   let productTotalPrice = document.getElementById('totalPrice');
+  //   productTotalPrice.textContent = totalPrice;
+  //   console.log(totalPrice);
  }
-getTotals();
+  getTotals();
 
 // // Modification d'une quantité de produit
 // function quantityModification() {
