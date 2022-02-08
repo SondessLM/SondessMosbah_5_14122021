@@ -66,7 +66,7 @@ function addToCart(productId) {
         const quantity = quantitySelector.value;
         const color = colorSelector.value;
         const price = priceSelector.innerHTML;
-
+        console.log(price);
         if ("" == color || "undefined" == color) {
             alert("Veuillez sélectionner une couleur valide.");
         } else if (quantity <= 0 || quantity > 100 || "undefined" == quantity) {
@@ -93,6 +93,7 @@ function addToCart(productId) {
                     productId: productId,
                     productColor: color,
                     productQuantity: parseInt(quantity),
+                    productPrice: parseInt(price),
                 }
                 localStorageCart.push(product);
                 localStorage.setItem('cart', JSON.stringify(localStorageCart));

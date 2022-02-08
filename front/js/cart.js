@@ -1,13 +1,14 @@
-var cart = getLocalStorageCart();
-
 displayProductInCart();
 
+/**
+ * Display product in cart.
+ */
 function displayProductInCart(){
-  
+  var cart = getLocalStorageCart();
   if (cart && null != cart && "undefined" != cart && cart.length > 0) {
-    cart = JSON.parse(cart);
+    cartItems = JSON.parse(cart);
     // var cartItemsSelector = document.querySelector("#cart__items");
-    cart.forEach(async function (cartItem){
+    cartItems.forEach(async function (cartItem){
     //for ( let product in cart){
       let product = await getProduct(cartItem.productId);
   
@@ -93,17 +94,7 @@ function displayProductInCart(){
       buttonDelete.classList.add ("deleteItem");
       buttonDelete.textContent = "Supprimer";           
     });
-    var productQuantity= document.querySelectorAll('.itemQuantity');
-    totalQuantity = 0; 
-    console.log(productQuantity);
-     for (var i = 0; i < productQuantity.length ; i++) {
-          //productQuantity.value = cart[i].productQuantity;
-          console.log(productQuantity[i].value);
-          totalQuantity += productQuantity[i].val();
-         // console.log(totalQuantity);
-     }      
-    let productTotalQuantity = document.querySelector('#totalQuantity');
-    productTotalQuantity.textContent = totalQuantity; 
+
     } else {
     //Creation de l'élément / balise  erreur.
     var errorMessageSelector = document.createElement("p");
@@ -123,76 +114,69 @@ function displayProductInCart(){
     formSelector.style.display = "none";
     alert=("Votre panier est vide.");
    }
-  
+   updateSubTotal();
 }
 
-function getTotals(){ 
+/**
+ * Update sub total (Total quantity and total price)
+ */
+function updateSubTotal(){ 
+  var cart = getLocalStorageCart();
+
+  let productTotalQuantity = document.querySelector('#totalQuantity');
+  let productTotalPrice = document.querySelector('#totalPrice');
+  
   totalQuantity = 0; 
+  totalPrice = 0; 
+  
   if (cart && null != cart && "undefined" != cart && cart.length > 0) {
-    cart = JSON.parse(cart);
-    cart.forEach(function (cartItem){
+    cartItems = JSON.parse(cart);
+    cartItems.forEach( function (cartItem){
       totalQuantity += cartItem.productQuantity;
+      totalPrice +=  cartItem.productQuantity * cartItem.productPrice;
     });
-  } 
-  console.log(totalQuantity);
-  //  // Récupération du total des quantités 
-  //  // let productQuantity = document.getElementsByName('itemQuantity');
-  //   var productQuantity= document.getElementsByClassName('itemQuantity');
-     
-  //    console.log(productQuantity.length);
-  //     for (var i = 0; i < productQuantity.length ; i++) {
-  //          //productQuantity.value = cart[i].productQuantity;
-  //          console.log(productQuantity[i].value);
-  //          totalQuantity += productQuantity[i].val();
-  //         // console.log(totalQuantity);
-  //     }      
-  //    let productTotalQuantity = document.querySelector('#totalQuantity');
-  //    productTotalQuantity.textContent = totalQuantity;
-  //   // console.log(totalQuantity);
-      
-  //   // Récupération du prix total
-  //    totalPrice = 0;
-  //      for (var i = 0; i <productQuantity.length; ++i) {
-  //       totalPrice += (totalQuantity * cart.price);
-  //      }
-  //   let productTotalPrice = document.getElementById('totalPrice');
-  //   productTotalPrice.textContent = totalPrice;
-  //   console.log(totalPrice);
+  }
+  productTotalQuantity.textContent = totalQuantity;
+  productTotalPrice.textContent = totalPrice;
  }
-  getTotals();
 
-// // Modification d'une quantité de produit
-// function quantityModification() {
-//     let ModifyQuantity = document.querySelectorAll(".itemQuantity");
 
-//     for (let j = 0; j < ModifyQuantity.length; j++){
-//         ModifyQuantity[j].addEventListener("change" , (event) => {
-//             event.preventDefault();
+// Modification d'une quantité de produit
+function quantityModification() {
+    let ModifyQuantity = document.querySelectorAll(".itemQuantity");
+    ModifyQuantity=totalQuantity;
 
-//             //Selection de l'element à modifier en fonction de son id ET sa couleur
-//             let quantityModif = cart[j].productQuantity;
-//             let ModifyQuantityValue = ModifyQuantity[j].valueAsNumber;
+    for (let j = 0; j < ModifyQuantity.value; j++){
+        ModifyQuantity[j].addEventListener("change" , (event) => {
+            event.preventDefault();
+
+            //Selection de l'element à modifier en fonction de son id ET sa couleur
+            let quantityModif = cart[j].productQuantity;
+            let ModifyQuantityValue = ModifyQuantity[j].valueAsNumber;
             
-//             const localStorageCart = cart.find((el) => el.ModifyQuantityValue !== quantityModif);
+            const localStorageCart = cart.find((el) => el.ModifyQuantityValue !== quantityModif);
 
-//             localStorageCart.productQuantity = ModifyQuantityValue;
-//             cart[j].productQuantity = localStorageCart.productQuantity;
+            localStorageCart.productQuantity = ModifyQuantityValue;
+            cart[j].productQuantity = localStorageCart.productQuantity;
 
-//             localStorage.setItem("cart", JSON.stringify(cart));
+            localStorage.setItem("cart", JSON.stringify(cart));
         
-//             // refresh rapide
-//             location.reload();
-//         })
-//     }
-// }
-// quantityModification();
+            // refresh rapide
+            location.reload();
+        })
+    }
+}
+quantityModification();
 
-// //Suppression d'un produit
+//Suppression d'un produit
 // function deleteProduct() {
-//     let deleteButton = document.querySelectorAll(".deleteItem");
-//      for (let k = 0; k < deleteButton.value; k++){
-//       deleteButton[k].addEventListener("click" , (event) => {
-//             event.preventDefault();
+//     buttonDelete = document.querySelectorAll(".deleteItem");
+//     buttonDelete.textContent = "Supprimer"; 
+//     buttonDelete= totalQuantity;
+//     console.log(buttonDelete.value);
+//      for (let k = 0; k < buttonDelete; k++){
+//       buttonDelete[k].addEventListener("click" , function() {
+//             //event.preventDefault();
 
 //             //Selection de l'element à supprimer en fonction de son id ET sa couleur
 //             let deleteId = cart[k].productId;
