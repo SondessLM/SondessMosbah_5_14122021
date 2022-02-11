@@ -99,10 +99,10 @@ function addToCart(productId) {
                 localStorage.setItem('cart', JSON.stringify(localStorageCart));
                 alert("Votre produit a été ajouté au panier.");
             }
-            var redirectToCart = confirm("Souhaitez vous accédez a votre panier ?")
+            
+            }var redirectToCart = confirm("Souhaitez vous accédez a votre panier ?")
             if (redirectToCart) {
                 window.location.href = "../html/cart.html";
-            }
         }
     });
 }
