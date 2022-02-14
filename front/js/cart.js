@@ -173,13 +173,12 @@ function quantityModification(item, itemIndex, productsQuantitySelector) {
   productsQuantitySelector.addEventListener("change" , (event) => {
     event.preventDefault();
     var cart = getLocalStorageCart();
-    cartItems = JSON.parse(cart);
-    //for (cartItem in cartItems){
     if (cart && null != cart && "undefined" != cart && cart.length > 0) {
-      item.productQuantity = productQuantity.value;      
+      item.productQuantity = productQuantity.value;
+      cartItems = JSON.parse(cart);
       cartItems[itemIndex] = item;
       localStorage.setItem('cart', JSON.stringify(cartItems));
-    }//}
+    }
     updateSubTotal()
   });
 }
@@ -320,7 +319,7 @@ let adressRegex = new RegExp('^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëï
         
       }
     }
-     let orderId = fetch("http://localhost:3000/api/products/order", {
+     let order = fetch("http://localhost:3000/api/products/order", {
       method: "POST",
       headers: {
         'Accept': "application/json",
@@ -341,14 +340,14 @@ let adressRegex = new RegExp('^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëï
         return res.json();
       })
       .then(function (response) {
-        return response.orderId;
+        return response.order;
       });  
-    window.location.href = `../html/confirmation.html?orderid=${orderId}`;
+    //window.location.href = `../html/confirmation.html?orderid=${order}`;
         if (validControl()) {
           document.location.href = 'confirmation.html';
         }
-      })
+       })
   
-}
+ }
 postForm();
       
