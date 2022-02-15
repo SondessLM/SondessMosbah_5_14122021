@@ -201,8 +201,10 @@ function deleteProduct(item,index){
          
          //cartItem[index] = item;          
         cartItems.splice(item, 1); 
-        localStorage.setItem('cart', JSON.stringify(cartItems));    
+        localStorage.setItem('cart', JSON.stringify(cartItems));  
+        
        } 
+       location.reload();
        updateSubTotal() ;          
         
                 
