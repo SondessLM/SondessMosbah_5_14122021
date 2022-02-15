@@ -159,12 +159,8 @@ function updateSubTotal(){
     cartItemsSelector.style.fontSize = "1.5em";
     var formSelector = document.querySelector(".cart__order");
     formSelector.style.display = "none";
-    alert=("Votre panier est vide.");
-    
+    alert=("Votre panier est vide.");   
      }
-     
-    
-  
 
 
 // Modification d'une quantité de produit
@@ -222,19 +218,20 @@ function deleteProduct(item,index){
       }    
     }
   
-//Liste les id des produits dans le panier
-//function Products() {
+
+  //push form
+function postForm() {
+  //Liste les id des produits dans le panier
+
   const cart = getLocalStorageCart();
-let products = [];
-  //for (i in cart) {
-    // products.push(cart[i]);
-     localStorage.setItem('cart', JSON.stringify(products));
+  cartItems = JSON.parse(cart);
+  let products = [];
+  for (let i=0; i <cartItems.lenght; ++i) {
+     products.push(cart[i]);}
+     console.log(products)
+     //localStorage.setItem('cart', JSON.stringify(products));
     
 
-  //}
-//}  
-//push form
-function postForm() {
   let orderId = document.querySelector('#order');
   orderId.addEventListener('click', (event) => {
    event.preventDefault();
@@ -254,9 +251,9 @@ let adressRegex = new RegExp('^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëï
 //valid informations input
     //FirstName
     function firstNameControl() {
-      let firstNameValid = contact.firstName;
+      const firstNameValid = contact.firstName;
       if (nameRegex.test(firstNameValid)) {
-        let firstNameErrorMsg = document.querySelector('#firstNameErrorMsg');
+        let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
         firstNameErrorMsg.style.display = 'none';
         return true;
       } else {
@@ -319,11 +316,11 @@ let adressRegex = new RegExp('^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëï
         
       }
     }
-     let order = fetch("http://localhost:3000/api/products/order", {
-      method: "POST",
+     fetch('http://localhost:3000/api/products/order', {
+      method: 'POST',
       headers: {
         'Accept': "application/json",
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({
         contact, //: {
@@ -333,21 +330,21 @@ let adressRegex = new RegExp('^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëï
         //   city: document.querySelector('#city').value,
         //   email: document.querySelector('#email').value,
         //      },
-        products,
+        products,       
       }),
+      
     })
       .then(function (res) {
         return res.json();
       })
       .then(function (response) {
-        return response.order;
+        return response.orderId;
       });  
-    //window.location.href = `../html/confirmation.html?orderid=${order}`;
-        if (validControl()) {
-          document.location.href = 'confirmation.html';
-        }
-       })
   
+        if (validControl()) {
+          window.location.href = 'confirmation.html' + '?orderId=' + orderId;
+        }
+       })          
  }
-postForm();
-      
+ postForm();
+

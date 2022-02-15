@@ -38,7 +38,7 @@
         });
     } else if (false == products) {
         //Creation de l'element / balise  erreur.
-        var errorMessage = document.createElement("h4");
+        var errorMessage = document.createElement("h2");
         errorMessage.textContent = "Aucun produit n'est disponble pour le moment.";
         items_selector.appendChild(errorMessage);
 

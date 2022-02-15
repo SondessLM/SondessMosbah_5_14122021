@@ -41,7 +41,7 @@ async function displayProduct(productId) {
         addToCart(productId);
     } else {
         //Creation de l'élément / balise  erreur.
-        var errorMessage = document.createElement("h4");
+        var errorMessage = document.createElement("h2");
         errorMessage.textContent = "Ce produit n'est pas disponble pour le moment.";
         var item_selector = document.querySelector(".item");
         item_selector.textContent = "";
