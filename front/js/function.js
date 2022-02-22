@@ -66,7 +66,7 @@ async function getProduct(productId) {
  * 
  * @returns Object localStorageCart The local storage cart.
  */
-function createlocalStorageCart() {
+function createLocalStorageCart() {
     var islocalStorageCart = checkLocalStorageCartExist();
     if (!islocalStorageCart) {
         localStorage.setItem("cart", JSON.stringify([]));

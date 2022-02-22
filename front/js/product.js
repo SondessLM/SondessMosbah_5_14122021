@@ -66,13 +66,12 @@ function addToCart(productId) {
         const quantity = quantitySelector.value;
         const color = colorSelector.value;
         const price = priceSelector.innerHTML;
-        console.log(price);
-        if ("" == color || "undefined" == color) {
+          if ("" == color || "undefined" == color) {
             alert("Veuillez sélectionner une couleur valide.");
         } else if (quantity <= 0 || quantity > 100 || "undefined" == quantity) {
             alert("Veuillez sélectionner une quantité valide. La quantité doit etre comprise entre 1 et 100.");
         } else {
-            var localStorageCart = createlocalStorageCart();
+            var localStorageCart = createLocalStorageCart();
             localStorageCart = JSON.parse(localStorageCart);
             var productExistInLocalStorageCart = checkProductExistInLocalStorageCart(productId, color);
 
@@ -100,9 +99,11 @@ function addToCart(productId) {
                 alert("Votre produit a été ajouté au panier.");
             }
             
-            }var redirectToCart = confirm("Souhaitez vous accédez a votre panier ?")
+            var redirectToCart = confirm("Souhaitez vous accédez a votre panier ?")
             if (redirectToCart) {
                 window.location.href = "../html/cart.html";
+            }
+
         }
     });
 }
