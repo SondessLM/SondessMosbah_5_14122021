@@ -48,7 +48,7 @@ async function getProduct(productId) {
  * 
  * @returns bool localStorageCartExist The local storage cart exist.
  */
- function checkLocalStorageCartExist() {
+function checkLocalStorageCartExist() {
     var localStorageCartExist = false;
     if ("undefined" !== typeof (Storage)) {
         var cart = localStorage.getItem('cart');

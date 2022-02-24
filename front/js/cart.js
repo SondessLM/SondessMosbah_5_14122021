@@ -137,27 +137,29 @@ function updateSubTotal() {
       totalQuantity += parseInt(cartItem.productQuantity);
       totalPrice += cartItem.productQuantity * cartItem.productPrice;
     });
-  }
-  productTotalQuantity.textContent = totalQuantity;
-  productTotalPrice.textContent = totalPrice;
 
-  if (totalQuantity == 0 && totalPrice == 0) {
-    var errorMessageSelector = document.createElement("p");
-    errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
+    productTotalQuantity.textContent = totalQuantity;
+    productTotalPrice.textContent = totalPrice;
 
-    var shopLinkSelector = document.createElement("a");
-    shopLinkSelector.href = "index.html";
-    shopLinkSelector.textContent = "Boutique";
+    if (totalQuantity == 0 && totalPrice == 0) {
+      var errorMessageSelector = document.createElement("p");
+      errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
 
-    errorMessageSelector.appendChild(shopLinkSelector);
+      var shopLinkSelector = document.createElement("a");
+      shopLinkSelector.href = "index.html";
+      shopLinkSelector.textContent = "Boutique";
 
-    var cartItemsSelector = document.querySelector("#cart__items");
-    cartItemsSelector.appendChild(errorMessageSelector);
-    cartItemsSelector.style.textAlign = "center";
-    cartItemsSelector.style.fontSize = "1.5em";
-    var formSelector = document.querySelector(".cart__order");
-    formSelector.style.display = "none";
-    alert = ("Votre panier est vide.");
+      errorMessageSelector.appendChild(shopLinkSelector);
+
+      var cartItemsSelector = document.querySelector("#cart__items");
+      cartItemsSelector.appendChild(errorMessageSelector);
+      cartItemsSelector.style.textAlign = "center";
+      cartItemsSelector.style.fontSize = "1.5em";
+      var formSelector = document.querySelector(".cart__order");
+      formSelector.style.display = "none";
+      alert = ("Votre panier est vide.");
+    }
+
   }
 
 }
@@ -323,22 +325,13 @@ function postForm() {
   let orderId = document.querySelector('#order');
   orderId.addEventListener('click', (event) => {
     event.preventDefault();
-    //Initialisation de la variable contenant les inction de contact du client.
-    let contact = {
-      "firstName": "",
-      "lastName": "",
-      "address": "",
-      "city": "",
-      "email": ""
-    };
 
     //Récupération des identifiant des produits.
     const cart = getLocalStorageCart();
     cartItems = JSON.parse(cart);
     let products = [];
     cartItems.forEach(function (cartItem) {
-      console.log(cartItem);
-      products.push = cartItem["productId"];
+      products.push(cartItem.productId);
     });
 
     let validFirstName = isValidFirstName();
@@ -347,53 +340,47 @@ function postForm() {
     let validCity = isValidCity();
     let validEmail = isValidEmail();
 
-    //console.log(validFirstName, validLastName, validAdress, validCity, validEmail);
-
     if (validFirstName && validLastName && validAdress && validCity && validEmail) {
-       
-      
-      //Ici le forumaire il est valide 
-      //Donc tu peut construire l'objet order avec a l'interieur l'objet contact et l'objet produit.
-      //Contacter l'API pour renregistrer la commamde.
-    
-      localStorage.setItem('contact', JSON.stringify(contact));  
-      const order = {
-      contact,
-      products,
-    }
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(order),
-      headers: { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json' ,
-        
-      }      
-    };
-  
-    fetch('http://localhost:3000/api/products/order',options)
+
+      let contact = {
+        "firstName": document.getElementById("firstName").value,
+        "lastName": document.getElementById("lastName").value,
+        "address": document.getElementById("address").value,
+        "city": document.getElementById("city").value,
+        "email": document.getElementById("email").value
+      };
+
+      //localStorage.setItem('contact', JSON.stringify(contact));
+      let order = {
+        contact,
+        products,
+      }
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(order),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      };
+
+      fetch('http://localhost:3000/api/products/order', options)
         .then((res) => {
           return res.json();
         })
-        .then((product) => {
-          const orderId = product.orderId;
-          
-          
+        .then((order) => {
+          localStorage.removeItem("cart");
           //envoie vers la page de de confirmation
-          localStorage.setItem("order", JSON.stringify(orderId));
-          document.location.href = `confirmation.html?id=${orderId}`;            
-          
-           
+          document.location.href = `confirmation.html?orderId=${order.orderId}`;
         })
         .catch((error) => {
           alert(error);
         });
-         
-    
-     // fin eventListener postForm
-    } else {// fin envoi du for
-      alert("Veuillez vérifier les données du formulaire.");}
-})}
+    } else {
+      alert("Veuillez vérifier les données du formulaire.");
+    }
+  })
+}
 
-  
 postForm();

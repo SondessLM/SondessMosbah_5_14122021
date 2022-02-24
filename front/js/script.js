@@ -1,5 +1,5 @@
 /**
- * Display products on the index.html page.
+ * Display products on the index.html page (afficher la liste des produits sur la page index.html).
  */
  async function displayProducts() {
     let products = await getProducts();
