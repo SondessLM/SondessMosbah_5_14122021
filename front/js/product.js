@@ -32,7 +32,6 @@ async function displayProduct(productId) {
 
         // get colors
         for (let colors of product.colors) {
-            //console.table(colors);
             let productColors = document.createElement("option");
             document.querySelector("#colors").appendChild(productColors);
             productColors.value = colors;
