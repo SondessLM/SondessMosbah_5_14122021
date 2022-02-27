@@ -78,7 +78,7 @@ function addToCart(productId) {
                 // //Ici le produit existe deja dans le local storage, donc il faudras mettre a jour la quantite
                 // //En faisant la quantite dans le localstorage + la nouvelle quantite.
                 localStorageCart.forEach(function (cartItem, index) {
-                    if (cartItem.productId == productId) {
+                    if (cartItem.productId == productId && cartItem.productColor == color) {
                         cartItem.productQuantity = parseInt(cartItem.productQuantity) + parseInt(quantity);
                         localStorageCart[index] = cartItem;
                         localStorage.setItem('cart', JSON.stringify(localStorageCart));
