@@ -1,7 +1,7 @@
 /**
- * Display products on the index.html page (afficher la liste des produits sur la page index.html).
+ * Display products on the index.html page.
  */
- async function displayProducts() {
+async function displayProducts() {
     let products = await getProducts();
     let items_selector = document.querySelector('.items');
     if (products) {

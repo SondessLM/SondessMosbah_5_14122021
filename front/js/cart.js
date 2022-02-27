@@ -195,23 +195,23 @@ function deleteProduct(item, index, buttonDelete) {
     var ProductToDelete = confirm("Souhaitez vous suprimer le produit de votre panier ?")
     if (ProductToDelete) {
       let buttonClicked = event.target;
+     
       let itemToDelete = buttonClicked.closest("section > article");
-
       let itemToDeleteId = itemToDelete.getAttribute("data-id");
-      let itemToDeleteColor = itemToDelete.getAttribute("data-color");
       itemToDelete.remove();
+      let itemToDeleteColor = itemToDelete.getAttribute("data-color");
       let productQuantity = document.querySelector('.itemQuantity');
       productQuantity == null;
       var cart = getLocalStorageCart();
       cartItems = JSON.parse(cart);
       for (let cartItem in cartItems) {
-        cartItems[index] = item;
+        cartItem.productQuantity == null;        
         item == 0;
-        cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor;
-        cartItem.productQuantity == null;
-        //cartItem[index] = item;          
-        cartItems.splice(item, 1);
+        cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor;   
+        //cartItems[index] = item;             
+        cartItems.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cartItems));
+        
       }
       location.reload();
       updateSubTotal();
@@ -382,9 +382,5 @@ function postForm() {
     }
   })
 }
-
-
-
-
 
 postForm();
