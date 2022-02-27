@@ -204,12 +204,10 @@ function quantityModification(item, itemIndex, productsQuantitySelector) {
       productQuantity == null;
       var cart = getLocalStorageCart();
       cartItems = JSON.parse(cart);
-      for (let cartItem in cartItems) {
-        cartItems[index] = item;
-        item == 0;
-        cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor;
-        cartItem.productQuantity == null;
-        //cartItem[index] = item;          
+      let cartItem = cartItems [index];
+            
+       if( cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor && cartItem.productQuantity === itemToDelete);{
+        item == 0;    
         cartItems.splice(item, 1);
         localStorage.setItem('cart', JSON.stringify(cartItems));
       }
@@ -219,7 +217,6 @@ function quantityModification(item, itemIndex, productsQuantitySelector) {
     }
   });
 }
-
 /**
  * Check if first name is valid.
  * 
