@@ -185,7 +185,7 @@ function quantityModification(item, itemIndex, productsQuantitySelector) {
 }
 
 /**
- * 
+ * Delete product
  * @param {*} item 
  * @param {*} index 
  * @param {*} buttonDelete 
@@ -196,22 +196,19 @@ function quantityModification(item, itemIndex, productsQuantitySelector) {
     if (ProductToDelete) {
       let buttonClicked = event.target;
       let itemToDelete = buttonClicked.closest("section > article");
-
+      console.log(itemToDelete);
       let itemToDeleteId = itemToDelete.getAttribute("data-id");
       let itemToDeleteColor = itemToDelete.getAttribute("data-color");
       itemToDelete.remove();
-      let productQuantity = document.querySelector('.itemQuantity');
-      productQuantity == null;
+            
       var cart = getLocalStorageCart();
       cartItems = JSON.parse(cart);
       let cartItem = cartItems [index];
             
-       if( cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor && cartItem.productQuantity === itemToDelete);{
-        item == 0;    
-        cartItems.splice(item, 1);
+       if( cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor){
+        cartItems.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cartItems));
       }
-      location.reload();
       updateSubTotal();
       alert("votre produit a été bien supprimé.")
     }
