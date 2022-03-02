@@ -128,40 +128,56 @@ function updateSubTotal() {
   let productTotalQuantity = document.querySelector('#totalQuantity');
   let productTotalPrice = document.querySelector('#totalPrice');
 
-  totalQuantity = 0;
-  totalPrice = 0;
-
-  if (cart && null != cart && "undefined" != cart && cart.length > 0) {
-    cartItems = JSON.parse(cart);
-    cartItems.forEach(function (cartItem) {
+  let totalQuantity = 0;
+  let totalPrice = 0;
+  cartItems = JSON.parse(cart);
+  if (cartItems && null != cartItems && "undefined" != cartItems && cartItems.length > 0) {
+    cartItems.forEach(async function (cartItem) {
+      let product = await getProduct(cartItem.productId);
       totalQuantity += parseInt(cartItem.productQuantity);
-      totalPrice += cartItem.productQuantity * cartItem.productPrice;
-    });
+      totalPrice += cartItem.productQuantity * parseInt(product.price);
 
+      productTotalQuantity.textContent = totalQuantity;
+      productTotalPrice.textContent = totalPrice;
+
+      if (totalQuantity == 0 && totalPrice == 0) {
+        var errorMessageSelector = document.createElement("p");
+        errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
+
+        var shopLinkSelector = document.createElement("a");
+        shopLinkSelector.href = "index.html";
+        shopLinkSelector.textContent = "Boutique";
+
+        errorMessageSelector.appendChild(shopLinkSelector);
+
+        var cartItemsSelector = document.querySelector("#cart__items");
+        cartItemsSelector.appendChild(errorMessageSelector);
+        cartItemsSelector.style.textAlign = "center";
+        cartItemsSelector.style.fontSize = "1.5em";
+        var formSelector = document.querySelector(".cart__order");
+        formSelector.style.display = "none";
+        alert = ("Votre panier est vide.");
+      }
+    });
+  } else {
     productTotalQuantity.textContent = totalQuantity;
     productTotalPrice.textContent = totalPrice;
 
-    if (totalQuantity == 0 && totalPrice == 0) {
-      var errorMessageSelector = document.createElement("p");
-      errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
+    var errorMessageSelector = document.createElement("p");
+    errorMessageSelector.textContent = "Votre panier est vide. Veuillez continuer votre achat dans la ";
 
-      var shopLinkSelector = document.createElement("a");
-      shopLinkSelector.href = "index.html";
-      shopLinkSelector.textContent = "Boutique";
-
-      errorMessageSelector.appendChild(shopLinkSelector);
-
-      var cartItemsSelector = document.querySelector("#cart__items");
-      cartItemsSelector.appendChild(errorMessageSelector);
-      cartItemsSelector.style.textAlign = "center";
-      cartItemsSelector.style.fontSize = "1.5em";
-      var formSelector = document.querySelector(".cart__order");
-      formSelector.style.display = "none";
-      alert = ("Votre panier est vide.");
-    }
-
+    var shopLinkSelector = document.createElement("a");
+    shopLinkSelector.href = "index.html";
+    shopLinkSelector.textContent = "Boutique";
+    errorMessageSelector.appendChild(shopLinkSelector);
+    var cartItemsSelector = document.querySelector("#cart__items");
+    cartItemsSelector.appendChild(errorMessageSelector);
+    cartItemsSelector.style.textAlign = "center";
+    cartItemsSelector.style.fontSize = "1.5em";
+    var formSelector = document.querySelector(".cart__order");
+    formSelector.style.display = "none";
+    alert = ("Votre panier est vide.");
   }
-
 }
 
 /**
@@ -190,22 +206,21 @@ function quantityModification(item, itemIndex, productsQuantitySelector) {
  * @param {*} index 
  * @param {*} buttonDelete 
  */
- function deleteProduct(item, index, buttonDelete) {
+function deleteProduct(item, index, buttonDelete) {
   buttonDelete.addEventListener("click", function (event) {
     var ProductToDelete = confirm("Souhaitez vous suprimer le produit de votre panier ?")
     if (ProductToDelete) {
       let buttonClicked = event.target;
       let itemToDelete = buttonClicked.closest("section > article");
-      console.log(itemToDelete);
       let itemToDeleteId = itemToDelete.getAttribute("data-id");
       let itemToDeleteColor = itemToDelete.getAttribute("data-color");
       itemToDelete.remove();
-            
+
       var cart = getLocalStorageCart();
       cartItems = JSON.parse(cart);
-      let cartItem = cartItems [index];
-            
-       if( cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor){
+      let cartItem = cartItems[index];
+
+      if (cartItem.productId === itemToDeleteId && cartItem.productColor === itemToDeleteColor) {
         cartItems.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cartItems));
       }
@@ -344,7 +359,6 @@ function postForm() {
         "email": document.getElementById("email").value
       };
 
-      //localStorage.setItem('contact', JSON.stringify(contact));
       let order = {
         contact,
         products,

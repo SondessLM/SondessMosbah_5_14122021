@@ -91,7 +91,6 @@ function addToCart(productId) {
                     productId: productId,
                     productColor: color,
                     productQuantity: parseInt(quantity),
-                    productPrice: parseInt(price),
                 }
                 localStorageCart.push(product);
                 localStorage.setItem('cart', JSON.stringify(localStorageCart));
